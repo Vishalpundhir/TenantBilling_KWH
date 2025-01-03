@@ -1,0 +1,48 @@
+.table-navy {
+    background-color: #001f54;
+  }
+  
+  .table-navy th {
+    color: white;
+    text-align: center;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .btn-navy {
+    background-color: #001f54;
+    color: white;
+  }
+  
+  .btn-navy:hover {
+    background-color: #003580;
+    color: white;
+  }
+  
+  .btn-outline-navy {
+    border-color: #001f54;
+    color: #001f54;
+  }
+  
+  .btn-outline-navy:hover {
+    background-color: #001f54;
+    color: white;
+  }
+  
+  .modal {
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+  }
+  
+  .modal-dialog {
+    margin-top: 50px;
+    margin-right: 150px;
+  }
+  
+  .modal-content {
+    z-index: 1051;
+    background-color: #fff;
+    border-radius: 8px;
+  }

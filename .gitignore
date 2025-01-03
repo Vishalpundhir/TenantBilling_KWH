@@ -1,0 +1,6 @@
+# Node.js dependencies for Angular
+frontend/node_modules/
+
+# IntelliJ project files
+backend/.idea/
+backend/target/

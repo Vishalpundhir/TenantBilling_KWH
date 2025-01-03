@@ -1,0 +1,80 @@
+<div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Energy Meter Management</h2>
+    </div>
+
+    <div class="mb-3 text-end">
+        <button class="btn btn-navy" (click)="onAddEnergyMeter()">Add Energy Meter</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-navy text-white">
+                <tr>
+                    <th scope="col" class="text-dark">ID</th>
+                    <th scope="col" class="text-dark">Name</th>
+                    <th scope="col" class="text-dark">Tenant ID</th>
+                    <th scope="col" class="text-dark">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let energyMeter of energyMeters">
+                    <td>{{ energyMeter.id }}</td>
+                    <td>{{ energyMeter.name }}</td>
+                    <td>{{ energyMeter.tenantId }}</td>
+                    <td>
+                        <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditEnergyMeter(energyMeter.id)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" (click)="onDeleteEnergyMeter(energyMeter.id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade show" [ngClass]="{ 'd-block': showForm }" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="text-navy">{{ isEdit ? 'Edit' : 'Add' }} Energy Meter</h4>
+                    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name
+                                <p class="text-muted">
+                                    Please enter the exact name of the energy meter that is present in the database.
+                                </p>
+                            </label>
+                            <input type="text" id="name" class="form-control" [(ngModel)]="currentEnergyMeter.name"
+                                name="name" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentEnergyMeter.name }" />
+                            <div *ngIf="showErrors && !currentEnergyMeter.name" class="invalid-feedback">
+                                Name is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tenantId" class="form-label">Tenant ID</label>
+                            <input type="number" id="tenantId" class="form-control"
+                                [(ngModel)]="currentEnergyMeter.tenantId" name="tenantId" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentEnergyMeter.tenantId }" />
+                            <div *ngIf="showErrors && !currentEnergyMeter.tenantId" class="invalid-feedback">
+                                Tenant ID is required.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-navy" (click)="onCancel()">Cancel</button>
+                    <button type="button" class="btn btn-navy" (click)="onSaveEnergyMeter()">
+                        {{ isEdit ? 'Update' : 'Add' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+.btn-navy {
+    background-color: #001f54;
+    color: white;
+  }
+  
+  .btn-navy:hover {
+    background-color: #003580;
+    color: white;
+  }
+  
+  .btn-outline-navy {
+    border-color: #001f54;
+    color: #001f54;
+  }
+  
+  .btn-outline-navy:hover {
+    background-color: #001f54;
+    color: white;
+  }
+
+  /* Pie chart container */
+canvas {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  margin: auto;
+}
+
+.invalid-feedback {
+  display: block;
+  color: red;
+}
+
+#pieChartTooltip {
+  position: absolute;
+  display: none;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+

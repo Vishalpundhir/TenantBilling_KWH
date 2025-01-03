@@ -1,0 +1,127 @@
+<div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Tenant List</h2>
+    </div>
+
+    <div class="mb-3 text-end">
+        <input   type="checkbox" [(ngModel)]="showAllDetails"> Show all details
+        <button class="btn btn-navy" (click)="onAddTenant()">Add Tenant</button>   
+    </div>
+    <div class="mb-3 text-end">
+        
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-navy text-white">
+                <tr>
+                    <th scope="col" class="text-dark">ID</th>
+                    <th scope="col" class="text-dark">Name</th>
+                    <th scope="col" class="text-dark">Address</th>
+                    <th scope="col" class="text-dark">Person of Contact</th>
+                    <th scope="col" class="text-dark">Mobile Number</th>
+                    <th scope="col" class="text-dark" *ngIf="showAllDetails">Email</th>
+                    <th scope="col" class="text-dark" *ngIf="showAllDetails">Unit Address</th>
+                    <th scope="col" class="text-dark">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tenant of tenants">
+                    <td>{{ tenant.id }}</td>
+                    <td>{{ tenant.name }}</td>
+                    <td>{{ tenant.address }}</td>
+                    <td>{{ tenant.personOfContact }}</td>
+                    <td>{{ tenant.mobileNumber }}</td>
+                    <td *ngIf="showAllDetails">{{ tenant.email }}</td>
+                    <td *ngIf="showAllDetails">{{ tenant.unitAddress }}</td>
+                    <td>
+                        <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditTenant(tenant.id)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <button class="btn btn-danger btn-sm" (click)="onDeleteTenant(tenant.id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade show" [ngClass]="{'d-block': showForm}" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="text-navy" *ngIf="!isEdit">Add Tenant</h4>
+                    <h4 class="text-navy" *ngIf="isEdit">Edit Tenant</h4>
+                    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" id="name" class="form-control" [(ngModel)]="currentTenant.name"
+                                name="name" required [ngClass]="{ 'is-invalid': showErrors && !currentTenant.name }" />
+                            <div *ngIf="showErrors && !currentTenant.name" class="invalid-feedback">
+                                Name is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" id="address" class="form-control" [(ngModel)]="currentTenant.address"
+                                name="address" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentTenant.address }" />
+                            <div *ngIf="showErrors && !currentTenant.address" class="invalid-feedback">
+                                Address is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="personOfContact" class="form-label">Person of Contact</label>
+                            <input type="text" id="personOfContact" class="form-control"
+                                [(ngModel)]="currentTenant.personOfContact" name="personOfContact" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentTenant.personOfContact }" />
+                            <div *ngIf="showErrors && !currentTenant.personOfContact" class="invalid-feedback">
+                                Person of Contact is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobileNumber" class="form-label">Mobile Number</label>
+                            <input type="text" id="mobileNumber" class="form-control"
+                                [(ngModel)]="currentTenant.mobileNumber" name="mobileNumber" required
+                                pattern="^[0-9]{10}$"
+                                [ngClass]="{ 'is-invalid': showErrors && !currentTenant.mobileNumber }" />
+                            <div *ngIf="showErrors && !currentTenant.mobileNumber" class="invalid-feedback">
+                                Mobile Number is required and must be 10 digits.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" [(ngModel)]="currentTenant.email"
+                                name="email" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentTenant.email }" />
+                            <div *ngIf="showErrors && !currentTenant.email" class="invalid-feedback">
+                                Email is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitAddress" class="form-label">Unit Address</label>
+                            <input type="text" id="unitAddress" class="form-control"
+                                [(ngModel)]="currentTenant.unitAddress" name="unitAddress" required
+                                [ngClass]="{ 'is-invalid': showErrors && !currentTenant.unitAddress }" />
+                            <div *ngIf="showErrors && !currentTenant.unitAddress" class="invalid-feedback">
+                                Unit Address is required.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-navy" (click)="onCancel()">Cancel</button>
+                    <button type="button" class="btn btn-navy" (click)="onSaveTenant()">{{ isEdit ? 'Update' : 'Add'
+                        }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

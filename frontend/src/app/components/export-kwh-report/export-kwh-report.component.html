@@ -1,0 +1,96 @@
+<div class="container mt-5">
+    <!-- Title -->
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Export KWH Report</h2>
+    </div>
+
+    <!-- Form Section -->
+    <form>
+        <!-- Report Type and Tenant Name -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="tenantName" class="form-label text-gray">Select Tenant Name</label>
+                <select class="form-select" id="tenantName" [(ngModel)]="selectedTenantId" name="tenantName" required
+                    [ngClass]="{ 'is-invalid': showErrors && !selectedTenantId }" (change)="onTenantChange($event)">
+                    <option value="" selected disabled>Select a Tenant</option>
+                    <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.name }}</option>
+                </select>
+                <div *ngIf="showErrors && !selectedTenantId" class="invalid-feedback">
+                    This field is required.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="reportType" class="form-label text-gray">Report Type</label>
+                <select class="form-select" id="reportType" [(ngModel)]="reportType" name="reportType" required
+                    [ngClass]="{ 'is-invalid': showErrors && !reportType }">
+                    <option value="" selected disabled>Select Report Type</option>
+                    <option value="daily">Daily</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+                <div *ngIf="showErrors && !reportType" class="invalid-feedback">
+                    This field is required.
+                </div>
+            </div>
+        </div>
+
+        <!-- Select Energy Meter -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="energyMeter" class="form-label text-gray">Select Energy Meter/s</label>
+                <div class="custom-checkbox-container" id="energyMeter">
+                    <div *ngFor="let meter of energyMeters" class="form-check">
+                        <input class="form-check-input" type="checkbox" [id]="'checkbox-' + meter.id" [value]="meter.id"
+                            [checked]="selectedEnergyMeters.includes(meter.id)" (change)="toggleSelection(meter.id)" />
+                        <label class="form-check-label" [for]="'checkbox-' + meter.id">
+                            {{ meter.name }}
+                        </label>
+                    </div>
+                </div>
+                <div *ngIf="showErrors && selectedEnergyMeters.length === 0" class="invalid-feedback">
+                    Please select at least one energy meter.
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Date and End Date -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="startDate" class="form-label text-gray">Select Start Date/Month</label>
+                <input *ngIf="reportType === 'monthly'" type="month" class="form-control" id="startMonth"
+                    [(ngModel)]="startMonth" name="startMonth" required
+                    [ngClass]="{ 'is-invalid': submitted && !startMonth }" (change)="onInputChange()" />
+                <input *ngIf="reportType !== 'monthly'" type="date" class="form-control" id="startDate"
+                    [(ngModel)]="startDate" name="startDate" required
+                    [ngClass]="{ 'is-invalid': submitted && !startDate }" (change)="onInputChange()" />
+                <div *ngIf="submitted && (reportType === 'monthly' ? !startMonth : !startDate)"
+                    class="invalid-feedback">
+                    Please select a {{ reportType === 'monthly' ? 'start month' : 'start date' }}.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="endDate" class="form-label text-gray">Select End Date/Month</label>
+                <input *ngIf="reportType === 'monthly'" type="month" class="form-control" id="endMonth"
+                    [(ngModel)]="endMonth" name="endMonth" required
+                    [ngClass]="{ 'is-invalid': showErrors && !endMonth }" (change)="onInputChange()" />
+                <input *ngIf="reportType !== 'monthly'" type="date" class="form-control" id="endDate"
+                    [(ngModel)]="endDate" name="endDate" required [ngClass]="{ 'is-invalid': showErrors && !endDate }"
+                    (change)="onInputChange()" />
+                <div *ngIf="showErrors && (reportType === 'monthly' ? !endMonth : !endDate)" class="invalid-feedback">
+                    Please select a {{ reportType === 'monthly' ? 'end month' : 'end date' }}.
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <label class="form-label text-gray d-block mb-2">Export Report</label>
+                <div class="btn-group" role="group" aria-label="Export Options">
+                    <button type="button" class="btn btn-navy px-4 me-2" (click)="exportReport('excel')">Export as
+                        Excel</button>
+                    <button type="button" class="btn btn-navy px-4" (click)="exportReport('pdf')">Export as PDF</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,39 @@
+
+<div class="container mt-4">
+  <div class="mb-4 text-center">
+    <h2 class="text-navy">Pie Chart Report</h2>
+  </div>
+
+  <form style="margin-left: 35px;">
+    <div class="row mb-3 align-items-center">
+      <div class="col">
+        <label for="tenantName" class="form-label text-gray">Select Tenant</label>
+        <select class="form-select" id="tenantName" [(ngModel)]="selectedTenantId" name="tenantName"
+          [ngClass]="{ 'is-invalid': showErrors && !selectedTenantId }" required>
+          <option value="" selected disabled>Select a Tenant</option>
+          <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.name }}</option>
+        </select>
+        <div *ngIf="showErrors && !selectedTenantId" class="invalid-feedback">Please select a tenant.</div>
+      </div>
+
+      <div class="col">
+        <label for="monthYear" class="form-label text-gray">Select Month & Year</label>
+        <input type="month" class="form-control" id="monthYear" [(ngModel)]="selectedMonthYear" name="monthYear"
+          [ngClass]="{ 'is-invalid': showErrors && !selectedMonthYear }" required />
+        <div *ngIf="showErrors && !selectedMonthYear" class="invalid-feedback">Please select a month and year.</div>
+      </div>
+    </div>
+  </form>
+
+  <div class="mb-3" style="margin-left: 35px;">
+    <button type="button" class="btn btn-navy px-4 w-100" (click)="handleShowPieChart()">Show Pie Chart</button>
+  </div>
+
+  <div class="mt-4" style="margin-left: 15px;">
+    <canvas #pieChartCanvas></canvas>
+  </div>
+
+  <div id="pieChartTooltip"
+    style="position: absolute; display: none; background-color: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
+</div>

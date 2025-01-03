@@ -1,0 +1,66 @@
+.sidebar {
+    height: 100vh;
+    width: 270px;
+    background-color: #343a40;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+  }
+  
+  .logo {
+    font-size: 25px;
+    font-weight: 400;
+    font-weight: bold;
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #495057;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  
+  .nav-link {
+    color: #d1d1d1;
+    font-weight: 400;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-left: 15px;
+  }
+  
+  .nav-link.active {
+    background-color: #0d6efd;
+    color: white;
+    width: 240px;
+    border-radius: 5px;
+  }
+  
+  .nav-link:hover {
+    background-color: #495057;
+    color: white;
+    width: 240px;
+    border-radius: 5px;
+  }
+  
+  .sidebar-footer {
+    margin-left: 15px;
+    margin-right: 15px;
+    border-top: 1px solid #495057;
+  }
+  
+  .dropdown-menu {
+    background-color: #343a40;
+    position: relative;
+    color: white;
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #495057;
+    color: white;
+  }
+  

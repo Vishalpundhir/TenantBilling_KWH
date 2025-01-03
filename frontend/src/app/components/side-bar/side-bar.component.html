@@ -1,0 +1,44 @@
+<div class="sidebar">
+  <div class="logo">
+    <span>Company Logo</span>
+  </div>
+ 
+  <nav class="nav flex-column mt-3">
+    <a routerLink="/export-kwh-report" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-file-earmark-text me-2"></i> Export KWH Report
+
+    </a>
+    <a routerLink="/daily-visual-report" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-bar-chart-line me-2"></i> Daily Visual Report
+    </a>
+    <a routerLink="/tenant-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-person-lines-fill me-2"></i> Tenant Management
+    </a>
+    <a routerLink="/energy-meter-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-gear-wide-connected me-2"></i> EMs Management
+    </a>
+    <a routerLink="/pie-chart" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-pie-chart-fill me-2"></i> Pie Charts
+    </a>
+  </nav>
+  
+
+  <div class="sidebar-footer mt-auto px-3 py-2">
+    <div class="d-flex align-items-center justify-content-between">
+      <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle me-2" />
+      <div class="text-white">
+        <strong>{{ userName }}</strong>
+      </div>
+      <button style="margin-right: 50px; margin-top: 4px;" class="btn btn-sm" (click)="toggleDropdown()"
+        [attr.aria-expanded]="showDropdown">
+        <i class="bi" [ngClass]="showDropdown ? 'bi-chevron-up' : 'bi-chevron-down'" style="color: white;"></i>
+      </button>
+    </div>
+
+    <div *ngIf="showDropdown" class="dropdown-menu dropdown-menu-dark show p-2 mt-2" style="position: relative;">
+      <a class="dropdown-item text-white" href="#">Profile</a>
+      <a class="dropdown-item text-white" href="#">Settings</a>
+      <a class="dropdown-item text-white" href="#">Sign Out</a>
+    </div>
+  </div>
+</div>
