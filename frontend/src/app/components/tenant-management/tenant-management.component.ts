@@ -20,6 +20,7 @@ export class TenantManagementComponent {
   currentTenant: any = {
      id: null, name: '', address: '', personOfContact: '', mobileNumber: '',
       email: '',
+      areaOccupied:'',
     unitAddress: ''
      };
   showErrors: boolean = false;
@@ -40,9 +41,25 @@ export class TenantManagementComponent {
     );
   }
 
+  // onAddTenant(): void {
+  //   this.isEdit = false;
+  //   this.currentTenant = { id: null, name: '', address: '', personOfContact: '', mobileNumber: '', email: '',unitAddress: '' };
+  //   this.showForm = true;
+  //   this.showErrors = false;
+  // }
+
   onAddTenant(): void {
     this.isEdit = false;
-    this.currentTenant = { id: null, name: '', address: '', personOfContact: '', mobileNumber: '', email: '',unitAddress: '' };
+    this.currentTenant = {
+      id: null,
+      name: '',
+      address: '',
+      personOfContact: '',
+      mobileNumber: '',
+      email: '',
+      areaOccupied: '',
+      unitAddress: '',
+    };
     this.showForm = true;
     this.showErrors = false;
   }
@@ -59,6 +76,47 @@ export class TenantManagementComponent {
   }
 
 
+  // onSaveTenant(): void {
+  //   this.showErrors = true;
+
+  //   if (
+  //     !this.currentTenant.name ||
+  //     !this.currentTenant.address ||
+  //     !this.currentTenant.personOfContact ||
+  //     !this.currentTenant.mobileNumber ||
+  //     !this.currentTenant.email ||
+  //     !this.currentTenant.unitAddress
+  //   ) {
+  //     console.log('Form validation failed');
+  //     return;
+  //   }
+
+  //   this.showErrors = false;
+
+  //   if (this.isEdit) {
+  //     this.http.put<any>(`http://localhost:8080/bms-reports/v1/update-tenant/${this.currentTenant.id}`, this.currentTenant).subscribe(
+  //       (updatedTenant) => {
+  //         console.log('Tenant updated successfully');
+  //         const index = this.tenants.findIndex((t) => t.id === this.currentTenant.id);
+  //         if (index > -1) {
+  //           this.tenants[index] = { ...this.currentTenant };
+  //         }
+  //         this.showForm = false;
+  //       },
+  //       (error) => console.error('Error updating tenant:', error)
+  //     );
+  //   } else {
+  //     this.http.post<any>('http://localhost:8080/bms-reports/v1/add-tenant', this.currentTenant).subscribe(
+  //       (newTenant) => {
+  //         console.log('Tenant added successfully');
+  //         this.loadTenants(); // Reload the tenants list to get the ID from the database
+  //         this.showForm = false;
+  //       },
+  //       (error) => console.error('Error adding tenant:', error)
+  //     );
+  //   }
+  // }
+
   onSaveTenant(): void {
     this.showErrors = true;
 
@@ -68,7 +126,8 @@ export class TenantManagementComponent {
       !this.currentTenant.personOfContact ||
       !this.currentTenant.mobileNumber ||
       !this.currentTenant.email ||
-      !this.currentTenant.unitAddress
+      !this.currentTenant.unitAddress ||
+      !this.currentTenant.areaOccupied
     ) {
       console.log('Form validation failed');
       return;
@@ -92,7 +151,7 @@ export class TenantManagementComponent {
       this.http.post<any>('http://localhost:8080/bms-reports/v1/add-tenant', this.currentTenant).subscribe(
         (newTenant) => {
           console.log('Tenant added successfully');
-          this.loadTenants(); // Reload the tenants list to get the ID from the database
+          this.loadTenants();
           this.showForm = false;
         },
         (error) => console.error('Error adding tenant:', error)

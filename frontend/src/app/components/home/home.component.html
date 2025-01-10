@@ -1,0 +1,36 @@
+<div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Building Details</h2>
+    </div>
+
+    <div class="card shadow bg-dark text-white" style="background-size: cover; background-position: center; background-image: url('../../../assets/images/db.png');">
+        <div class="card-overlay">
+            <div class="card-body">
+                <h4 class="card-title text-white mb-3">{{ building?.buildingName }}</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-light">Address</h6>
+                        <p>{{ building?.address }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-light">Total Area</h6>
+                        <p>{{ building?.totalArea }} sq. ft.</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-light">Email</h6>
+                        <p>{{ building?.email }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-light">Person of Contact</h6>
+                        <p>{{ building?.personOfContact }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-light">Phone Number</h6>
+                        <p>{{ building?.phoneNumber }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

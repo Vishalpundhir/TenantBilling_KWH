@@ -2,11 +2,16 @@
   <div class="logo">
     <span>Company Logo</span>
   </div>
- 
+
   <nav class="nav flex-column mt-3">
+    <a routerLink="/home" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-house-door-fill me-2"></i> Home
+    </a>
+    <a routerLink="/common-area" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-building me-2"></i> Common Area
+    </a>
     <a routerLink="/export-kwh-report" routerLinkActive="active" class="nav-link">
       <i class="bi bi-file-earmark-text me-2"></i> Export KWH Report
-
     </a>
     <a routerLink="/daily-visual-report" routerLinkActive="active" class="nav-link">
       <i class="bi bi-bar-chart-line me-2"></i> Daily Visual Report
@@ -21,7 +26,6 @@
       <i class="bi bi-pie-chart-fill me-2"></i> Pie Charts
     </a>
   </nav>
-  
 
   <div class="sidebar-footer mt-auto px-3 py-2">
     <div class="d-flex align-items-center justify-content-between">

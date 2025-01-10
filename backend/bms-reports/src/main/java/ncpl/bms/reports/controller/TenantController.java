@@ -24,9 +24,19 @@ public class TenantController {
     @Autowired
     private TenantService tenantService;
 
+//    @PostMapping("/add-tenant")
+//    public TenantDTO addTenant(@RequestBody TenantDTO tenantDTO) {
+//        return tenantService.addTenant(tenantDTO);
+//    }
+
     @PostMapping("/add-tenant")
     public TenantDTO addTenant(@RequestBody TenantDTO tenantDTO) {
         return tenantService.addTenant(tenantDTO);
+    }
+
+    @PutMapping("/update-tenant/{id}")
+    public TenantDTO updateTenant(@PathVariable Integer id, @RequestBody TenantDTO tenantDTO) {
+        return tenantService.updateTenant(id, tenantDTO);
     }
 
 
@@ -39,15 +49,13 @@ public class TenantController {
     }
 
 
-    @PutMapping("/update-tenant/{id}")
-    public TenantDTO updateTenant(@PathVariable Integer id, @RequestBody TenantDTO tenantDTO) {
-        return tenantService.updateTenant(id, tenantDTO);
-    }
+//    @PutMapping("/update-tenant/{id}")
+//    public TenantDTO updateTenant(@PathVariable Integer id, @RequestBody TenantDTO tenantDTO) {
+//        return tenantService.updateTenant(id, tenantDTO);
+//    }
 
     @GetMapping("/get-all-tenants")
     public List<TenantDTO> getAllTenants() {
         return tenantService.getAllTenants();
     }
-
-
 }

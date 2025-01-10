@@ -21,26 +21,58 @@ public class TenantService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public TenantDTO addTenant(TenantDTO tenantDTO) {
-        String sql = "INSERT INTO tenants (Name, Address, person_of_contact, mobile_number, unitAddress, email) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, tenantDTO.getName(), tenantDTO.getAddress(), tenantDTO.getPersonOfContact(), tenantDTO.getMobileNumber(), tenantDTO.getUnitAddress(),tenantDTO.getEmail() );
-        return tenantDTO;
-    }
+//    public TenantDTO addTenant(TenantDTO tenantDTO) {
+//        String sql = "INSERT INTO tenants (Name, Address, person_of_contact, mobile_number, unitAddress, email) VALUES (?, ?, ?, ?, ?, ?)";
+//        jdbcTemplate.update(sql, tenantDTO.getName(), tenantDTO.getAddress(), tenantDTO.getPersonOfContact(), tenantDTO.getMobileNumber(), tenantDTO.getUnitAddress(),tenantDTO.getEmail() );
+//        return tenantDTO;
+//    }
 
     public void deleteTenant(Integer id) {
         String sql = "DELETE FROM tenants WHERE Id = ?";
         jdbcTemplate.update(sql, id);
     }
 
+//    public TenantDTO updateTenant(Integer id, TenantDTO tenantDTO) {
+//        String sql = "UPDATE tenants SET Name = ?, Address = ?, person_of_contact = ?, mobile_number = ? , unitAddress = ?, email = ? WHERE Id = ?";
+//        jdbcTemplate.update(sql, tenantDTO.getName(), tenantDTO.getAddress(), tenantDTO.getPersonOfContact(), tenantDTO.getMobileNumber(),tenantDTO.getUnitAddress(),tenantDTO.getEmail(), id);
+//        tenantDTO.setId(id);
+//        return tenantDTO;
+//    }
+
+    public TenantDTO addTenant(TenantDTO tenantDTO) {
+        String sql = "INSERT INTO tenants (Name, Address, person_of_contact, mobile_number, unitAddress, email, areaOccupied) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(
+                sql,
+                tenantDTO.getName(),
+                tenantDTO.getAddress(),
+                tenantDTO.getPersonOfContact(),
+                tenantDTO.getMobileNumber(),
+                tenantDTO.getUnitAddress(),
+                tenantDTO.getEmail(),
+                tenantDTO.getAreaOccupied()
+        );
+        return tenantDTO;
+    }
+
     public TenantDTO updateTenant(Integer id, TenantDTO tenantDTO) {
-        String sql = "UPDATE tenants SET Name = ?, Address = ?, person_of_contact = ?, mobile_number = ? , unitAddress = ?, email = ? WHERE Id = ?";
-        jdbcTemplate.update(sql, tenantDTO.getName(), tenantDTO.getAddress(), tenantDTO.getPersonOfContact(), tenantDTO.getMobileNumber(),tenantDTO.getUnitAddress(),tenantDTO.getEmail(), id);
+        String sql = "UPDATE tenants SET Name = ?, Address = ?, person_of_contact = ?, mobile_number = ?, unitAddress = ?, email = ?, areaOccupied = ? WHERE Id = ?";
+        jdbcTemplate.update(
+                sql,
+                tenantDTO.getName(),
+                tenantDTO.getAddress(),
+                tenantDTO.getPersonOfContact(),
+                tenantDTO.getMobileNumber(),
+                tenantDTO.getUnitAddress(),
+                tenantDTO.getEmail(),
+                tenantDTO.getAreaOccupied(),
+                id
+        );
         tenantDTO.setId(id);
         return tenantDTO;
     }
 
     public List<TenantDTO> getAllTenants() {
-        String sql = "SELECT Id, Name, Address, person_of_contact, mobile_number, unitAddress, email FROM tenants";
+        String sql = "SELECT Id, Name, Address, person_of_contact, mobile_number, unitAddress,areaOccupied, email FROM tenants";
         return jdbcTemplate.query(sql, new RowMapper<TenantDTO>() {
             @Override
             public TenantDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -51,6 +83,7 @@ public class TenantService {
                         rs.getString("person_of_contact"),
                         rs.getString("mobile_number")  ,
                         rs.getString("unitAddress")  ,
+                        rs.getInt("areaOccupied"),
                         rs.getString("email")
                 );
             }

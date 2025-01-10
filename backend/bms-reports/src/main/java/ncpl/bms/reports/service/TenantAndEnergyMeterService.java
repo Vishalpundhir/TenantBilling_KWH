@@ -30,19 +30,6 @@ public class TenantAndEnergyMeterService {
         }
     }
 
-//    public List<TenantDTO> getAllTenants() {
-//        String sql = "SELECT `Id`, `Name`, `Address` FROM `tenants`";
-//
-//        // Execute query and map results to a list of TenantDTO objects
-//        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-//            TenantDTO tenant = new TenantDTO();
-//            tenant.setId(rs.getInt("Id")); // Assuming TenantDTO has an `id` field now
-//            tenant.setName(rs.getString("Name"));
-//            tenant.setAddress(rs.getString("Address"));
-//            return tenant;
-//        });
-//    }
-
     public List<TenantEnergyMeterDTO> getAllActiveEnergyMeters() {
         // Query to fetch Id, Name, and Tenant_Id from tenants_energy_meters
         String sql = "SELECT Id, Name, Tenant_Id FROM tenants_energy_meters";

@@ -24,11 +24,6 @@ public class TenantAndEnergyMeterController {
         return tenantAndEnergyMeterService.getTenantDetailsById(tenantId);
     }
 
-//    @GetMapping("/all-tenants")
-//    public List<TenantDTO> getAllTenants() {
-//        return tenantAndEnergyMeterService.getAllTenants();
-//    }
-
     @GetMapping("/all-active-energy-meters")
     public List<TenantEnergyMeterDTO> getAllTableNames() {
         return tenantAndEnergyMeterService.getAllActiveEnergyMeters();

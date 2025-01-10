@@ -1,6 +1,6 @@
 package ncpl.bms.reports.model.dto;
 
-public class TenantDTO {
+public class CommonAreaDTO {
 
     private Integer id;
     private String name;
@@ -8,21 +8,22 @@ public class TenantDTO {
     private String personOfContact;
     private String mobileNumber;
     private String unitAddress;
-    private Integer areaOccupied; // New field
+    private Integer totalArea;// New field
     private String email;       // New field
 
+
     // Default constructor
-    public TenantDTO() {}
+    public CommonAreaDTO() {}
 
     // Parameterized constructor
-    public TenantDTO(Integer id, String name, String address, String personOfContact, String mobileNumber, String unitAddress, Integer areaOccupied, String email) {
+    public CommonAreaDTO(Integer id, String name, String address, String personOfContact, String mobileNumber, String unitAddress, Integer totalArea, String email) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.personOfContact = personOfContact;
         this.mobileNumber = mobileNumber;
         this.unitAddress = unitAddress;
-        this.areaOccupied = areaOccupied;
+        this.totalArea = totalArea;
         this.email = email;
     }
 
@@ -75,12 +76,12 @@ public class TenantDTO {
         this.unitAddress = unitAddress;
     }
 
-    public Integer getAreaOccupied() {
-        return areaOccupied;
+    public Integer getTotalArea() {
+        return totalArea;
     }
 
-    public void setAreaOccupied(Integer areaOccupied) {
-        this.areaOccupied = areaOccupied;
+    public void setTotalArea(Integer totalArea) {
+        this.totalArea = totalArea;
     }
 
     public String getEmail() {
@@ -90,7 +91,4 @@ public class TenantDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-
-
 }
-

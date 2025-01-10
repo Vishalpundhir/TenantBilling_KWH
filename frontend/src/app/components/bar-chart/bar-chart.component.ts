@@ -157,7 +157,6 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   updateChart(data: any[], month: string, year: string): void {
     // Format the dates to dd-mm-yyyy
     const days = data.map((item) => {
