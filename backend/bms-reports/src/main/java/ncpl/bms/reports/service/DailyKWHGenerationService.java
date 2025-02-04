@@ -56,17 +56,30 @@ public class DailyKWHGenerationService {
 
         for (String tableName : tableNames) {
             // SQL query for the current table
+//            String sql = String.format(
+//                    "SELECT DATE(t1.timestamp) AS day, " +
+//                            "t1.kwh AS start_kwh, " +
+//                            "t2.kwh AS next_day_kwh " +
+//                            "FROM %s t1 " +
+//                            "LEFT JOIN %s t2 ON t2.timestamp = DATE_ADD(DATE(t1.timestamp), INTERVAL 1 DAY) " +
+//                            "WHERE t1.timestamp BETWEEN ? AND ? " +
+//                            "AND TIME(t1.timestamp) = '00:00:00' " +
+//                            "ORDER BY day",
+//                    tableName, tableName
+//            );
+
             String sql = String.format(
                     "SELECT DATE(t1.timestamp) AS day, " +
-                            "t1.kwh AS start_kwh, " +
-                            "t2.kwh AS next_day_kwh " +
+                            "       MIN(t1.kwh) AS start_kwh, " +
+                            "       MAX(t2.kwh) AS next_day_kwh " +
                             "FROM %s t1 " +
-                            "LEFT JOIN %s t2 ON t2.timestamp = DATE_ADD(DATE(t1.timestamp), INTERVAL 1 DAY) " +
+                            "LEFT JOIN %s t2 ON DATE(t2.timestamp) = DATE_ADD(DATE(t1.timestamp), INTERVAL 1 DAY) " +
                             "WHERE t1.timestamp BETWEEN ? AND ? " +
-                            "AND TIME(t1.timestamp) = '00:00:00' " +
+                            "GROUP BY DATE(t1.timestamp) " +
                             "ORDER BY day",
                     tableName, tableName
             );
+
 
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, fromTimestamp, toTimestamp);
 
@@ -179,120 +192,6 @@ public class DailyKWHGenerationService {
 
 
 
-//    public void generateDailyKwhReportPdf(
-//            String fileName,
-//            Map<String, List<DailyKwhReportDTO>> reportData,
-//            String fromDate,
-//            String toDate,
-//            String tenantName) {
-//        try {
-//            // Initialize PDF writer
-//            PdfWriter writer = new PdfWriter(fileName);
-//            PdfDocument pdf = new PdfDocument(writer);
-//            Document document = new Document(pdf);
-//
-//            // Add a title
-//            Paragraph title = new Paragraph("Daily kWh Report of " + tenantName)
-//                    .setTextAlignment(TextAlignment.CENTER)
-//                    .setBold()
-//                    .setFontSize(18);
-//            document.add(title);
-//
-//            // Add subheading with date range
-//            Paragraph subheading = new Paragraph("From: " + fromDate + "  To: " + toDate)
-//                    .setTextAlignment(TextAlignment.CENTER)
-//                    .setFontSize(12)
-//                    .setMarginBottom(20);
-//            document.add(subheading);
-//
-//            // Iterate over tables and generate reports for each
-//            for (Map.Entry<String, List<DailyKwhReportDTO>> entry : reportData.entrySet()) {
-//                String tableName = entry.getKey();
-//                List<DailyKwhReportDTO> report = entry.getValue();
-//
-//                // Add table name as section header
-//                Paragraph tableNameHeader = new Paragraph("Meter: " + tableName)
-//                        .setBold()
-//                        .setFontSize(14)
-//                        .setMarginTop(20);
-//                document.add(tableNameHeader);
-//
-//                // Create a table with two columns
-//                Table table = new Table(UnitValue.createPercentArray(new float[]{50, 50}))
-//                        .setWidth(UnitValue.createPercentValue(100))
-//                        .setMarginTop(10);
-//
-//                // Add headers
-//                table.addHeaderCell(new Cell().add(new Paragraph("Date")
-//                        .setBold()
-//                        .setTextAlignment(TextAlignment.CENTER)));
-//                table.addHeaderCell(new Cell().add(new Paragraph("Daily kWh")
-//                        .setBold()
-//                        .setTextAlignment(TextAlignment.CENTER)));
-//
-//                // Populate rows
-//                double maxKwh = 0;
-//                for (DailyKwhReportDTO dto : report) {
-//                    table.addCell(new Cell().add(new Paragraph(dto.getDate())
-//                            .setTextAlignment(TextAlignment.CENTER)));
-//                    table.addCell(new Cell().add(new Paragraph(String.format("%.2f", dto.getDailyKwh()))
-//                            .setTextAlignment(TextAlignment.RIGHT)));
-//
-//                    // Track the maximum kWh value for scaling the chart
-//                    maxKwh = Math.max(maxKwh, dto.getDailyKwh());
-//                }
-//
-//                // Add table to the document
-//                document.add(table);
-//
-//                // Draw bar chart for this energy meter
-//                if (!report.isEmpty()) {
-//                    PdfCanvas canvas = new PdfCanvas(pdf.addNewPage());
-//                    float chartWidth = 500;
-//                    float chartHeight = 200;
-//                    float startX = 50;
-//                    float startY = 600;
-//
-//                    // Draw chart axes
-//                    canvas.moveTo(startX, startY)
-//                            .lineTo(startX, startY + chartHeight)
-//                            .lineTo(startX + chartWidth, startY)
-//                            .stroke();
-//
-//                    float barWidth = chartWidth / report.size();
-//                    float scaleFactor = (float) chartHeight / (float) maxKwh;
-//
-//                    // Draw bars
-//                    float currentX = startX;
-//                    for (DailyKwhReportDTO dto : report) {
-//                        float barHeight = dto.getDailyKwh().floatValue() * scaleFactor;
-//                        canvas.setFillColor(ColorConstants.BLUE)
-//                                .rectangle(currentX, startY, barWidth - 5, barHeight)
-//                                .fill();
-//                        currentX += barWidth;
-//                    }
-//
-//                    // Add labels
-//                    currentX = startX;
-//                    for (DailyKwhReportDTO dto : report) {
-//                        canvas.beginText()
-//                                .setFontAndSize(PdfFontFactory.createFont(), 10)
-//                                .moveText(currentX + (barWidth / 4), startY - 10)
-//                                .showText(dto.getDate())
-//                                .endText();
-//                        currentX += barWidth;
-//                    }
-//                }
-//            }
-//
-//            // Close the document
-//            document.close();
-//            System.out.println("PDF generated successfully: " + fileName);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error while generating PDF", e);
-//        }
-//    }
-
 
     public void ExportDailyKwhReportPdf(List<String> tableNames, String fromDate, String toDate, String tenantName) {
         // Map to store reports by table
@@ -310,6 +209,9 @@ public class DailyKWHGenerationService {
         // Generate the PDF with reports for all tables
         generateDailyKwhReportPdf(outputFileName, reportData, fromDate, toDate, tenantName);
     }
+
+
+
 
     public void ExportDailyKwhReportExcel(List<String> tableNames, String fromDate, String toDate , String tenantName) {
         // Map to store reports by table

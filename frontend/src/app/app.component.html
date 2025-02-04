@@ -1,8 +1,12 @@
-<div style="display: flex;;">
-    <div style="width: 20vw;  height: 100vh" >
-        <side-bar></side-bar>
-    </div>
-    <div style="width: 80vw;   height: 100vh" >
-         <router-outlet></router-outlet>
-    </div>
+<div style="display: flex;">
+  <div *ngIf="isLoggedIn" style="width: 20vw; height: 100vh;">
+    <side-bar (logout)="onLogout()"></side-bar>
+  </div>
+
+  <div [style.width]="isLoggedIn ? '80vw' : '100vw'" style="height: 100vh;">
+    <app-login *ngIf="!isLoggedIn" (loginSuccess)="onLoginSuccess()"></app-login>
+    <router-outlet *ngIf="isLoggedIn"></router-outlet>
+  </div>
 </div>
+
+

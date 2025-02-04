@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { environment } from '../../../environments/environment';
 
 Chart.register(...registerables);
 
@@ -25,6 +26,8 @@ export class BarChartComponent implements OnInit, AfterViewInit {
   showErrors: boolean = false;
   barChart!: Chart;
   currentChartType: 'bar' | 'line' = 'bar';
+  private apiBaseUrl = environment.apiBaseUrl;
+
 
   constructor(private http: HttpClient) {}
 
@@ -37,7 +40,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
   }
 
   fetchTenants(): void {
-    this.http.get<any[]>('http://localhost:8080/bms-reports/v1/get-all-tenants').subscribe({
+    this.http.get<any[]>(`${this.apiBaseUrl}/get-all-tenants`).subscribe({
       next: (data) => {
         this.tenants = data;
       },
@@ -55,7 +58,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
 
   fetchEnergyMeters(): void {
     this.http
-      .get<any[]>(`http://localhost:8080/bms-reports/v1/all-active-energy-meters?tenantId=${this.selectedTenantId}`)
+      .get<any[]>(`${this.apiBaseUrl}/all-active-energy-meters?tenantId=${this.selectedTenantId}`)
       .subscribe({
         next: (data) => {
           console.log('Raw data:', data); // Check raw response
@@ -112,7 +115,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     const tableNames = [this.selectedEnergyMeterId];
 
     this.http
-      .get<any[]>(`http://localhost:8080/bms-reports/v1/daily-kwh-data?tableNames=${tableNames.join(',')}&fromDate=${fromDate}&toDate=${toDate}`)
+      .get<any[]>(`${this.apiBaseUrl}/daily-kwh-data?tableNames=${tableNames.join(',')}&fromDate=${fromDate}&toDate=${toDate}`)
       .subscribe({
         next: (data) => {
           this.updateChart(data, month, year);

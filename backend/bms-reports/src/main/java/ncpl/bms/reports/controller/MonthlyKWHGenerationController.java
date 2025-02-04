@@ -15,6 +15,7 @@ import ncpl.bms.reports.model.dto.MonthlyKwhReportDTO;
 @RestController
 @RequestMapping("v1")
 @CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200"})
 @Slf4j
 public class MonthlyKWHGenerationController {
 

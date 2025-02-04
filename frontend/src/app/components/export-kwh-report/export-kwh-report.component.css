@@ -1,56 +1,75 @@
 .text-navy {
-    color: #001f54; 
-  }
-  
-  .btn-navy {
-    background-color: #001f54;
-    color: white;
-  }
-  
-  .btn-navy:hover {
-    background-color: #003580;
-    color: white;
-  }
-  
-  .btn-outline-navy {
-    border-color: #001f54;
-    color: #001f54;
-  }
-  
-  .btn-outline-navy:hover {
-    background-color: #001f54;
-    color: white;
-  }
-  
-  .text-gray {
-    color: #6c757d; 
-  }
-  
-  .text-error {
-    color: #ff6b6b; 
-  }
+  color: #001f54;
+}
 
+.btn-navy {
+  background-color: #001f54;
+  color: white;
+}
+
+.btn-navy:hover {
+  background-color: #003580;
+  color: white;
+}
+
+.btn-outline-navy {
+  border-color: #001f54;
+  color: #001f54;
+}
+
+.btn-outline-navy:hover {
+  background-color: #001f54;
+  color: white;
+}
+
+.text-gray {
+  color: #6c757d;
+}
+
+.text-error {
+  color: #ff6b6b;
+}
+/* 
 #energyMeter {
-  appearance: none; 
-  -moz-appearance: none; 
-  -webkit-appearance: none; 
-  border: 1px solid #ced4da; 
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #ced4da;
   padding: 8px;
   border-radius: 4px;
   height: 100px;
+} */
+
+#energyMeter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Spacing between checkboxes */
+  border: 1px solid #ced4da;
+  padding: 8px;
+  border-radius: 4px;
+  height: 150px;
+  max-height: 150px; /* Adjust to desired height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  
 }
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between checkbox and label */
+}
+
+
 .invalid-feedback {
   color: #dc3545;
   display: block;
   margin-top: 0.25rem;
   font-size: 0.875em;
 }
+
 .is-invalid-border {
-    border: 1px solid #dc3545; 
-    border-radius: 4px;
-    padding: 8px;
-    height: 100px;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  padding: 8px;
+  height: 100px;
 }
-
-
-

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'export-kwh-report',
@@ -25,7 +25,9 @@ export class ExportKwhReportComponent implements OnInit {
   submitted: boolean = false;
   startMonth: string = '';
   endMonth: string = '';
-  selectedTenantName: string = ''; // Added to store tenant name
+  selectedTenantName: string = '';
+  private apiBaseUrl = environment.apiBaseUrl;
+
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +36,7 @@ export class ExportKwhReportComponent implements OnInit {
   }
 
   fetchAllTenants(): void {
-    this.http.get<any[]>('http://localhost:8080/bms-reports/v1/get-all-tenants').subscribe({
+    this.http.get<any[]>(`${this.apiBaseUrl}/get-all-tenants`).subscribe({
       next: (data) => {
         this.tenants = data;
       },
@@ -44,29 +46,11 @@ export class ExportKwhReportComponent implements OnInit {
     });
   }
 
-  // fetchEnergyMetersByTenant(): void {
-  //   if (this.selectedTenantId) {
-  //     this.http.get<any[]>(`http://localhost:8080/bms-reports/v1/all-active-energy-meters?tenantId=${this.selectedTenantId}`).subscribe({
-  //       next: (data) => {
-  //         this.energyMeters = data.filter((meter) => meter.tenantId === this.selectedTenantId);
-  //         // Automatically check all energy meters
-  //         this.selectedEnergyMeters = this.energyMeters.map((meter) => meter.id);
-  //       },
-  //       error: (err) => {
-  //         console.error('Failed to fetch energy meters:', err);
-  //       }
-  //     });
-  //   } else {
-  //     this.energyMeters = [];
-  //     this.selectedEnergyMeters = [];
-  //   }
-  // }
-
   fetchEnergyMetersByTenant(): void {
     if (this.selectedTenantId) {
       const selectedTenant = this.tenants.find((tenant) => tenant.id === this.selectedTenantId);
       this.selectedTenantName = selectedTenant?.name || ''; // Store tenant name
-      this.http.get<any[]>(`http://localhost:8080/bms-reports/v1/all-active-energy-meters?tenantId=${this.selectedTenantId}`).subscribe({
+      this.http.get<any[]>(`${this.apiBaseUrl}/all-active-energy-meters?tenantId=${this.selectedTenantId}`).subscribe({
         next: (data) => {
           this.energyMeters = data.filter((meter) => meter.tenantId === this.selectedTenantId);
           // Automatically check all energy meters
@@ -107,11 +91,11 @@ export class ExportKwhReportComponent implements OnInit {
     const isMonthlyReport = this.reportType === 'monthly';
     const endpoint = isMonthlyReport
       ? type === 'pdf'
-        ? `http://localhost:8080/bms-reports/v1/monthly-kwh-report-pdf-file`
-        : `http://localhost:8080/bms-reports/v1/monthly-kwh-report-excel-file`
+        ? `${this.apiBaseUrl}/monthly-kwh-report-pdf-file`
+        : `${this.apiBaseUrl}/monthly-kwh-report-excel-file`
       : type === 'pdf'
-        ? `http://localhost:8080/bms-reports/v1/daily-kwh-report-pdf-file`
-        : `http://localhost:8080/bms-reports/v1/daily-kwh-report-excel-file`;
+        ? `${this.apiBaseUrl}/daily-kwh-report-pdf-file`
+        : `${this.apiBaseUrl}/daily-kwh-report-excel-file`;
     
         console.log(encodeURIComponent(this.selectedTenantName));
     const queryParams = isMonthlyReport

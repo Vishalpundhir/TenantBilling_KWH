@@ -17,17 +17,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("v1")
 @CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = {"http://localhost:4200", "http://127.0.0.1:4200"})
 @Slf4j
 public class TenantController {
 
 
     @Autowired
     private TenantService tenantService;
-
-//    @PostMapping("/add-tenant")
-//    public TenantDTO addTenant(@RequestBody TenantDTO tenantDTO) {
-//        return tenantService.addTenant(tenantDTO);
-//    }
 
     @PostMapping("/add-tenant")
     public TenantDTO addTenant(@RequestBody TenantDTO tenantDTO) {
@@ -39,7 +35,6 @@ public class TenantController {
         return tenantService.updateTenant(id, tenantDTO);
     }
 
-
     @DeleteMapping("/delete-tenant/{id}")
     public ResponseEntity<Map<String, String>> deleteTenant(@PathVariable Integer id) {
         tenantService.deleteTenant(id);
@@ -47,12 +42,6 @@ public class TenantController {
         response.put("message", "Tenant deleted successfully");
         return ResponseEntity.ok(response);
     }
-
-
-//    @PutMapping("/update-tenant/{id}")
-//    public TenantDTO updateTenant(@PathVariable Integer id, @RequestBody TenantDTO tenantDTO) {
-//        return tenantService.updateTenant(id, tenantDTO);
-//    }
 
     @GetMapping("/get-all-tenants")
     public List<TenantDTO> getAllTenants() {

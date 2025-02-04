@@ -46,3 +46,23 @@
   background-color: #fff;
   border-radius: 8px;
 }
+
+/* Custom scrollbar */
+.table-responsive::-webkit-scrollbar {
+  width: 6px; /* Set the scrollbar width */
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background for the track */
+  border-radius: 5px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #001f3f; /* Navy blue thumb */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: #004080; /* Lighter navy blue on hover */
+}

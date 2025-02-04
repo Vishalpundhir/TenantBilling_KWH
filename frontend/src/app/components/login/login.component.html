@@ -1,0 +1,36 @@
+<div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Login</h2>
+    </div>
+
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="row align-items-top" style=" height: 100px;">
+            <!-- Username Field -->
+            <div class="col-md-6">
+                <label for="username" class="form-label text-gray">Username</label>
+                <input type="text" class="form-control w-100" id="username" name="username" [(ngModel)]="username"
+                    required [ngClass]="{ 'is-invalid': showErrors && !username }" placeholder="Enter your username" />
+                <div *ngIf="showErrors && !username" class="invalid-feedback">
+                    Username is required.
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="col-md-6">
+                <label for="password" class="form-label text-gray">Password</label>
+                <input type="password" class="form-control w-100" id="password" name="password" [(ngModel)]="password"
+                    required [ngClass]="{ 'is-invalid': showErrors && !password }" placeholder="Enter your password" />
+                <div *ngIf="showErrors && !password" class="invalid-feedback">
+                    Password is required.
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Button -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-navy w-100 px-4">Login</button>
+            </div>
+        </div>
+    </form>
+</div>

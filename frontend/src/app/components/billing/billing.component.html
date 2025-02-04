@@ -1,0 +1,36 @@
+<div class="container mt-5">
+   
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Export Bill</h2>
+    </div>
+ 
+    <form>
+        <div class="row align-items-top" >
+           
+            <div class="col-md-4 " >
+                <label for="tenantName" class="form-label text-gray">Select Tenant Name</label>
+                <select class="form-select w-100" id="tenantName" [(ngModel)]="selectedTenantId" name="tenantName" required
+                    [ngClass]="{ 'is-invalid': showErrors && !selectedTenantId }">
+                    <option value="" selected disabled>Select a Tenant</option>
+                    <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.name }}</option>
+                </select>
+                <div *ngIf="showErrors && !selectedTenantId" class="invalid-feedback">
+                    This field is required.
+                </div>
+            </div>
+           
+            <div class="col-md-4">
+                <label for="billingMonth" class="form-label text-gray">Select Month</label>
+                <input type="month" class="form-control w-100" id="billingMonth" [(ngModel)]="selectedMonth"
+                    name="billingMonth" required [ngClass]="{ 'is-invalid': showErrors && !selectedMonth }" />
+                <div *ngIf="showErrors && !selectedMonth" class="invalid-feedback">
+                    Please select a month.
+                </div>
+            </div>
+          
+            <div class="col-md-4 text-center" style="margin-top: 32px;">
+                <button type="button" class="btn btn-navy w-100 px-4" (click)="exportBill()">Export Bill</button>
+            </div>
+        </div>
+    </form>
+</div>

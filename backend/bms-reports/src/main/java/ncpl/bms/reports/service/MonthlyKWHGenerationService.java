@@ -32,6 +32,8 @@ public class MonthlyKWHGenerationService {
     private MonthlyKWHExcelService monthlyKWHExcelService;
 
 
+
+
     public List<MonthlyKwhReportDTO> generateMonthlyKwhReport(List<String> tableNames, String fromMonthYear, String toMonthYear) {
         if (!fromMonthYear.matches("\\d{4}-\\d{2}") || !toMonthYear.matches("\\d{4}-\\d{2}")) {
             throw new IllegalArgumentException("Month and Year must be in YYYY-MM format");
@@ -113,55 +115,6 @@ public class MonthlyKWHGenerationService {
         String outputFileName = "monthly_kwh_report.pdf";
         generateMonthlyKwhReportPdf(outputFileName, reportData, fromMonthYear, toMonthYear, tenantName);
     }
-
-//    public void generateMonthlyKwhReportPdf(String fileName, Map<String, List<MonthlyKwhReportDTO>> reportData, String fromMonthYear, String toMonthYear) {
-//        try {
-//            PdfWriter writer = new PdfWriter(fileName);
-//            PdfDocument pdf = new PdfDocument(writer);
-//            Document document = new Document(pdf);
-//
-//            Paragraph title = new Paragraph("Monthly kWh Report")
-//                    .setTextAlignment(TextAlignment.CENTER)
-//                    .setBold()
-//                    .setFontSize(18);
-//            document.add(title);
-//
-//            Paragraph subheading = new Paragraph("From: " + fromMonthYear + "  To: " + toMonthYear)
-//                    .setTextAlignment(TextAlignment.CENTER)
-//                    .setFontSize(12)
-//                    .setMarginBottom(20);
-//            document.add(subheading);
-//
-//            for (Map.Entry<String, List<MonthlyKwhReportDTO>> entry : reportData.entrySet()) {
-//                String tableName = entry.getKey();
-//                List<MonthlyKwhReportDTO> report = entry.getValue();
-//
-//                Paragraph tableHeader = new Paragraph("Meter: " + tableName)
-//                        .setBold()
-//                        .setFontSize(14)
-//                        .setMarginTop(20);
-//                document.add(tableHeader);
-//
-//                Table table = new Table(UnitValue.createPercentArray(new float[]{50, 50}))
-//                        .setWidth(UnitValue.createPercentValue(100))
-//                        .setMarginTop(10);
-//
-//                table.addHeaderCell(new Cell().add(new Paragraph("Month").setBold().setFontSize(12).setTextAlignment(TextAlignment.CENTER)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-//                table.addHeaderCell(new Cell().add(new Paragraph("Monthly kWh").setBold().setFontSize(12).setTextAlignment(TextAlignment.CENTER)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-//
-//                for (MonthlyKwhReportDTO dto : report) {
-//                    table.addCell(new Cell().add(new Paragraph(dto.getMonth()).setTextAlignment(TextAlignment.CENTER)));
-//                    table.addCell(new Cell().add(new Paragraph(String.format("%.2f", dto.getMonthlyKwh())).setTextAlignment(TextAlignment.RIGHT)));
-//                }
-//
-//                document.add(table);
-//            }
-//
-//            document.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error while generating PDF", e);
-//        }
-//    }
 
     public void generateMonthlyKwhReportPdf(String fileName, Map<String, List<MonthlyKwhReportDTO>> reportData, String fromMonthYear, String toMonthYear, String tenantName) {
         try {

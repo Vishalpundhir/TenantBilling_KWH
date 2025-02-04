@@ -1,19 +1,19 @@
 .btn-navy {
-    background-color: #001f54;
-    color: white;
-  }
-  
-  .btn-navy:hover {
-    background-color: #003580;
-    color: white;
-  }
-  
-  .btn-outline-navy {
-    border-color: #001f54;
-    color: #001f54;
-  }
-  
-  .btn-outline-navy:hover {
-    background-color: #001f54;
-    color: white;
-  }
+  background-color: #001f54;
+  color: white;
+}
+
+.btn-navy:hover {
+  background-color: #003580;
+  color: white;
+}
+
+.btn-outline-navy {
+  border-color: #001f54;
+  color: #001f54;
+}
+
+.btn-outline-navy:hover {
+  background-color: #001f54;
+  color: white;
+}

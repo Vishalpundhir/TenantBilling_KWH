@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'home',
@@ -12,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
   building: any = null;
-
+  private apiBaseUrl = environment.apiBaseUrl;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit {
 
   getBuildingDetails(): void {
     this.http
-      .get('http://localhost:8080/bms-reports/v1/get-building-details/1')
+      .get(`${this.apiBaseUrl}/get-building-details/1`)
       .subscribe({
         next: (response: any) => {
           this.building = response;

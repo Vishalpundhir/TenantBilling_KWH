@@ -5,13 +5,15 @@
 
     <div class="mb-3 text-end">
         <input type="checkbox" [(ngModel)]="showAllDetails"> Show all details
-        <button class="btn btn-navy" (click)="onAddTenant()">Add Tenant</button>
+        <button class="btn btn-navy " (click)="onAddTenant()">Add Tenant</button>
+        
     </div>
+    
     <div class="mb-3 text-end">
 
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
         <table class="table table-bordered table-hover">
             <thead class="table-navy text-white">
                 <tr>
