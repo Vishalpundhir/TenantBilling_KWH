@@ -33,27 +33,27 @@
             </div>
         </div>
 
-        <!-- Select Energy Meter -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="energyMeter" class="form-label text-gray">Select Energy Meter/s</label>
-                <div class="custom-checkbox-container" id="energyMeter">
-                    <div *ngFor="let meter of energyMeters" class="form-check">
-                        <input class="form-check-input" type="checkbox" [id]="'checkbox-' + meter.id" [value]="meter.id"
-                            [checked]="selectedEnergyMeters.includes(meter.id)" (change)="toggleSelection(meter.id)" />
-                        <label class="form-check-label" [for]="'checkbox-' + meter.id">
-                            {{ meter.name }}
-                        </label>
-                    </div>
-                </div>
-                <div *ngIf="showErrors && selectedEnergyMeters.length === 0" class="invalid-feedback">
-                    Please select at least one energy meter.
+        <!-- Select Energy Meter -->   
+        <div class="col-md-12">
+            <label for="energyMeter" class="form-label text-gray">Select Energy Meter/s</label>
+            <div class="custom-checkbox-container" id="energyMeter"
+                 [ngClass]="{ 'is-invalid-border': showErrors && selectedEnergyMeters.length === 0 }">
+                <div *ngFor="let meter of energyMeters" class="form-check">
+                    <input class="form-check-input" type="checkbox" [id]="'checkbox-' + meter.id" [value]="meter.id"
+                           [checked]="selectedEnergyMeters.includes(meter.id)" (change)="toggleSelection(meter.id)" />
+                    <label class="form-check-label" [for]="'checkbox-' + meter.id">
+                        {{ meter.name }}
+                    </label>
                 </div>
             </div>
+            <div *ngIf="showErrors && selectedEnergyMeters.length === 0" class="invalid-feedback">
+                Please select at least one energy meter.
+            </div>
         </div>
+        
 
         <!-- Start Date and End Date -->
-        <div class="row mb-3">
+        <div class="row mb-3 mt-3">
             <div class="col-md-6">
                 <label for="startDate" class="form-label text-gray">Select Start Date/Month</label>
                 <input *ngIf="reportType === 'monthly'" type="month" class="form-control" id="startMonth"
@@ -86,9 +86,12 @@
             <div class="col-md-12 text-center">
                 <label class="form-label text-gray d-block mb-2">Export Report</label>
                 <div class="btn-group" role="group" aria-label="Export Options">
-                    <button type="button" class="btn btn-navy px-4 me-2" (click)="exportReport('excel')">Export as
+                    <button type="button" class="btn btn-navy px-4 me-2" (click)="exportReport('excel')" [disabled]="isInvalidDateRange()">Export as
                         Excel</button>
-                    <button type="button" class="btn btn-navy px-4" (click)="exportReport('pdf')">Export as PDF</button>
+                    <button type="button" class="btn btn-navy px-4" (click)="exportReport('pdf')" [disabled]="isInvalidDateRange()">Export as PDF</button>
+                </div>
+                <div *ngIf="isInvalidDateRange()" class="invalid-feedback">
+                    start date must be less than end date
                 </div>
             </div>
         </div>

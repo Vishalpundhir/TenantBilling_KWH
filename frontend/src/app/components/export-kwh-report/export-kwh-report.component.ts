@@ -72,61 +72,132 @@ export class ExportKwhReportComponent implements OnInit {
     this.fetchEnergyMetersByTenant();
   }
 
+  // exportReport(type: 'pdf' | 'excel'): void {
+  //   this.submitted = true; 
+  //   this.showErrors = !this.formIsValid();
+
+  //   if (this.showErrors) {
+  //     console.log('Form is invalid. Fix errors before exporting.');
+  //     return;
+  //   }
+
+  //   console.log('Form is valid. Proceeding with export.');
+
+  //   const tableNames = this.energyMeters
+  //     .filter((meter) => this.selectedEnergyMeters.includes(meter.id))
+  //     .map((meter) => meter.name)
+  //     .join(',');
+
+  //   const isMonthlyReport = this.reportType === 'monthly';
+  //   const endpoint = isMonthlyReport
+  //     ? type === 'pdf'
+  //       ? `${this.apiBaseUrl}/monthly-kwh-report-pdf-file`
+  //       : `${this.apiBaseUrl}/monthly-kwh-report-excel-file`
+  //     : type === 'pdf'
+  //       ? `${this.apiBaseUrl}/daily-kwh-report-pdf-file`
+  //       : `${this.apiBaseUrl}/daily-kwh-report-excel-file`;
+    
+  //       console.log(encodeURIComponent(this.selectedTenantName));
+  //   const queryParams = isMonthlyReport
+  //     ? `?tableNames=${tableNames}&fromMonthYear=${this.startMonth}&toMonthYear=${this.endMonth}&tenantName=${encodeURIComponent(this.selectedTenantName)}`
+  //     : `?tableNames=${tableNames}&fromDate=${this.startDate}&toDate=${this.endDate}&tenantName=${encodeURIComponent(this.selectedTenantName)}`;
+
+  //   const fullUrl = endpoint + queryParams;
+
+  //   console.log('Generated URL:', fullUrl);
+  //   window.open(fullUrl, '_blank');
+  // }
+
   exportReport(type: 'pdf' | 'excel'): void {
-    this.submitted = true; 
+    this.submitted = true;
     this.showErrors = !this.formIsValid();
 
     if (this.showErrors) {
-      console.log('Form is invalid. Fix errors before exporting.');
-      return;
+        console.log('Form is invalid. Fix errors before exporting.');
+        return;
+    }
+
+    if (this.isInvalidDateRange()) {
+        console.log('Invalid date range. Fix errors before exporting.');
+        return;
     }
 
     console.log('Form is valid. Proceeding with export.');
 
     const tableNames = this.energyMeters
-      .filter((meter) => this.selectedEnergyMeters.includes(meter.id))
-      .map((meter) => meter.name)
-      .join(',');
+        .filter((meter) => this.selectedEnergyMeters.includes(meter.id))
+        .map((meter) => meter.name)
+        .join(',');
 
     const isMonthlyReport = this.reportType === 'monthly';
+
     const endpoint = isMonthlyReport
-      ? type === 'pdf'
-        ? `${this.apiBaseUrl}/monthly-kwh-report-pdf-file`
-        : `${this.apiBaseUrl}/monthly-kwh-report-excel-file`
-      : type === 'pdf'
-        ? `${this.apiBaseUrl}/daily-kwh-report-pdf-file`
-        : `${this.apiBaseUrl}/daily-kwh-report-excel-file`;
-    
-        console.log(encodeURIComponent(this.selectedTenantName));
+        ? type === 'pdf'
+            ? `${this.apiBaseUrl}/monthly-kwh-report-pdf-file`
+            : `${this.apiBaseUrl}/monthly-kwh-report-excel-file`
+        : type === 'pdf'
+            ? `${this.apiBaseUrl}/daily-kwh-report-pdf-file`
+            : `${this.apiBaseUrl}/daily-kwh-report-excel-file`;
+
     const queryParams = isMonthlyReport
-      ? `?tableNames=${tableNames}&fromMonthYear=${this.startMonth}&toMonthYear=${this.endMonth}&tenantName=${encodeURIComponent(this.selectedTenantName)}`
-      : `?tableNames=${tableNames}&fromDate=${this.startDate}&toDate=${this.endDate}&tenantName=${encodeURIComponent(this.selectedTenantName)}`;
+        ? `?tableNames=${tableNames}&fromMonthYear=${this.startMonth}&toMonthYear=${this.endMonth}&tenantName=${encodeURIComponent(this.selectedTenantName)}`
+        : `?tableNames=${tableNames}&fromDate=${this.startDate}&toDate=${this.endDate}&tenantName=${encodeURIComponent(this.selectedTenantName)}`;
 
     const fullUrl = endpoint + queryParams;
 
     console.log('Generated URL:', fullUrl);
     window.open(fullUrl, '_blank');
-  }
+}
+
+
+  // formIsValid(): boolean {
+  //   if (this.reportType === 'monthly') {
+  //     return !!this.selectedTenantId &&
+  //            this.selectedEnergyMeters.length > 0 &&
+  //            !!this.startMonth &&
+  //            !!this.endMonth;
+  //   } else {
+  //     return !!this.selectedTenantId &&
+  //            this.selectedEnergyMeters.length > 0 &&
+  //            !!this.startDate &&
+  //            !!this.endDate;
+  //   }
+  // }
 
   formIsValid(): boolean {
     if (this.reportType === 'monthly') {
-      return !!this.selectedTenantId &&
-             this.selectedEnergyMeters.length > 0 &&
-             !!this.startMonth &&
-             !!this.endMonth;
+        return !!this.selectedTenantId &&
+            this.selectedEnergyMeters.length > 0 &&
+            !!this.startMonth &&
+            !!this.endMonth;
     } else {
-      return !!this.selectedTenantId &&
-             this.selectedEnergyMeters.length > 0 &&
-             !!this.startDate &&
-             !!this.endDate;
+        return !!this.selectedTenantId &&
+            this.selectedEnergyMeters.length > 0 &&
+            !!this.startDate &&
+            !!this.endDate &&
+            !this.isInvalidDateRange();
     }
-  }
+}
 
+
+isInvalidDateRange(): boolean {
+  if (this.reportType === 'monthly') {
+      return (this.startMonth && this.endMonth && this.startMonth) > this.endMonth;
+  } else {
+      return (this.startDate && this.endDate && this.startDate) > this.endDate;
+  }
+}
+
+  // onInputChange(): void {
+  //   if (this.submitted) {
+  //     this.showErrors = !this.formIsValid();
+  //   }
+  // }
   onInputChange(): void {
     if (this.submitted) {
-      this.showErrors = !this.formIsValid();
+        this.showErrors = !this.formIsValid();
     }
-  }
+}
 
   toggleSelection(meterId: number): void {
     const index = this.selectedEnergyMeters.indexOf(meterId);
