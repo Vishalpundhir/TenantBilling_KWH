@@ -1,4 +1,5 @@
 package ncpl.bms.reports.service;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,13 @@ import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+
+
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.layout.element.Table;
+
+
 
 @Service
 public class BillingService {
@@ -84,14 +92,12 @@ public class BillingService {
             Paragraph title = new Paragraph(billTitle + " - " + monthName + " " + year)
                     .setTextAlignment(TextAlignment.CENTER)
                     .setFontSize(14)
-//                    .setBold()
                     .setMarginBottom(20);
             document.add(title);
 
             // Add Client Details section
             document.add(new Paragraph("Client Details:")
                     .setFontSize(10)
-//                    .setBold()
                     .setMarginBottom(10));
             Table clientTable = new Table(UnitValue.createPercentArray(new float[]{2, 4}))
                     .setWidth(UnitValue.createPercentValue(100));
@@ -106,7 +112,6 @@ public class BillingService {
             // Add Tenant Details section
             document.add(new Paragraph("Tenant Details:")
                     .setFontSize(10)
-//                    .setBold()
                     .setMarginTop(20)
                     .setMarginBottom(10));
             Table tenantTable = new Table(UnitValue.createPercentArray(new float[]{2, 4}))
@@ -126,7 +131,6 @@ public class BillingService {
             // Add Bill Details section
             document.add(new Paragraph("Bill Details:")
                     .setFontSize(10)
-//                    .setBold()
                     .setMarginTop(20)
                     .setMarginBottom(10));
 
@@ -169,18 +173,11 @@ public class BillingService {
             billTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", dgUsage)).setFontSize(cellFontSize)));
             billTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", dgTariff)).setFontSize(cellFontSize)));
             billTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", totalAmount)).setFontSize(cellFontSize)));
-            // Add total row
-//            billTable.addCell(new Cell(1, 5).add(new Paragraph("Total Amount"))
-//                    .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-//                    .setTextAlignment(TextAlignment.RIGHT));
-//            billTable.addCell(new Cell().add(new Paragraph(String.format("₹ %.2f", totalAmount))));
-
             document.add(billTable);
             // common area details-----------------------------
 
             document.add(new Paragraph("Common Area Bill Details:")
                     .setFontSize(10)
-//                    .setBold()
                     .setMarginTop(20)
                     .setMarginBottom(10));
 
@@ -223,11 +220,6 @@ public class BillingService {
             commonAreabillTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", dgUsageCommonArea)).setFontSize(cellFontSize)));
             commonAreabillTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", dgTariff)).setFontSize(cellFontSize)));
             commonAreabillTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f ", totalAmountCommonArea)).setFontSize(cellFontSize)));
-            // Add total row
-//            commonAreabillTable.addCell(new Cell(1, 5).add(new Paragraph("Total Amount"))
-//                    .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-//                    .setTextAlignment(TextAlignment.RIGHT));
-//            commonAreabillTable.addCell(new Cell().add(new Paragraph(String.format("₹ %.2f", totalAmountCommonArea))));
             commonAreabillTable.addCell(new Cell(1, 5).add(new Paragraph("Net Payble Ammount Of CommonArea").setFontSize(cellFontSize))
                     .setBackgroundColor(ColorConstants.LIGHT_GRAY)
                     .setTextAlignment(TextAlignment.RIGHT));
@@ -250,6 +242,21 @@ public class BillingService {
 
             //-------------------------------------------------
 
+            // Add Page Numbers
+            for (int i = 1; i <= pdf.getNumberOfPages(); i++) {
+                PdfPage page = pdf.getPage(i);
+                PdfCanvas canvas = new PdfCanvas(page);
+                String pageNumber = "Page " + i + " of " + pdf.getNumberOfPages();
+                float x = (page.getPageSize().getWidth() - 100) / 2; // Centered
+                float y = 20; // Bottom margin
+                canvas.beginText()
+                        .setFontAndSize(PdfFontFactory.createFont(), 10)
+                        .moveText(x, y)
+                        .showText(pageNumber)
+                        .endText()
+                        .release();
+            }
+
             // Close document and return the byte array
             document.close();
             return outputStream.toByteArray();
@@ -257,6 +264,7 @@ public class BillingService {
             throw new RuntimeException("Error generating PDF", e);
         }
     }
+
 
 
     private double getDoubleValue(Object value) {

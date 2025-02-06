@@ -1,16 +1,15 @@
 package ncpl.bms.reports.service;
-import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.jdbc.core.JdbcTemplate;
-import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -20,16 +19,20 @@ import java.io.IOException;
 import java.util.List;
 import ncpl.bms.reports.model.dto.DailyKwhReportDTO;
 import com.itextpdf.kernel.pdf.*;
-import com.itextpdf.layout.*;
 import com.itextpdf.layout.element.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Map;
-
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.Document;
+
+import com.itextpdf.kernel.events.*;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+
 
 @Component
 @Slf4j
@@ -40,6 +43,9 @@ public class DailyKWHGenerationService {
 
     @Autowired
     private DailyKWHExcelService dailyKWHExcelService;
+
+    @Autowired
+    private PageNumberEventHandler pageNumberEventHandler;
 
 
     public List<DailyKwhReportDTO> generateDailyKwhReportData(List<String> tableNames, String fromDate, String toDate) {
@@ -55,19 +61,6 @@ public class DailyKWHGenerationService {
         List<DailyKwhReportDTO> combinedReports = new ArrayList<>();
 
         for (String tableName : tableNames) {
-            // SQL query for the current table
-//            String sql = String.format(
-//                    "SELECT DATE(t1.timestamp) AS day, " +
-//                            "t1.kwh AS start_kwh, " +
-//                            "t2.kwh AS next_day_kwh " +
-//                            "FROM %s t1 " +
-//                            "LEFT JOIN %s t2 ON t2.timestamp = DATE_ADD(DATE(t1.timestamp), INTERVAL 1 DAY) " +
-//                            "WHERE t1.timestamp BETWEEN ? AND ? " +
-//                            "AND TIME(t1.timestamp) = '00:00:00' " +
-//                            "ORDER BY day",
-//                    tableName, tableName
-//            );
-
             String sql = String.format(
                     "SELECT DATE(t1.timestamp) AS day, " +
                             "       MIN(t1.kwh) AS start_kwh, " +
@@ -79,8 +72,6 @@ public class DailyKWHGenerationService {
                             "ORDER BY day",
                     tableName, tableName
             );
-
-
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, fromTimestamp, toTimestamp);
 
             for (Map<String, Object> row : rows) {
@@ -101,6 +92,7 @@ public class DailyKWHGenerationService {
         return combinedReports;
     }
 
+
     public void generateDailyKwhReportPdf(
             String fileName,
             Map<String, List<DailyKwhReportDTO>> reportData,
@@ -112,6 +104,8 @@ public class DailyKWHGenerationService {
             PdfWriter writer = new PdfWriter(fileName);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
+     //**Attach Page Number Event Handler**
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, pageNumberEventHandler);
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
             // Add a title
@@ -157,14 +151,6 @@ public class DailyKWHGenerationService {
                                 .setTextAlignment(TextAlignment.CENTER))
                         .setBackgroundColor(ColorConstants.LIGHT_GRAY));
 
-                // Populate rows
-//                for (DailyKwhReportDTO dto : report) {
-//                    table.addCell(new Cell().add(new Paragraph(dto.getDate())
-//                            .setTextAlignment(TextAlignment.CENTER)));
-//
-//                    table.addCell(new Cell().add(new Paragraph(String.format("%.2f", dto.getDailyKwh()))
-//                            .setTextAlignment(TextAlignment.RIGHT)));
-//                }
 
                 for (DailyKwhReportDTO dto : report) {
                     // Format the date to dd-MM-yyyy
@@ -181,16 +167,15 @@ public class DailyKWHGenerationService {
                 // Add table to the document
                 document.add(table);
             }
-
             // Close the document
+
+
             document.close();
             System.out.println("PDF generated successfully: " + fileName);
         } catch (IOException | ParseException e) {
             throw new RuntimeException("Error while generating PDF", e);
         }
     }
-
-
 
 
     public void ExportDailyKwhReportPdf(List<String> tableNames, String fromDate, String toDate, String tenantName) {
@@ -209,8 +194,6 @@ public class DailyKWHGenerationService {
         // Generate the PDF with reports for all tables
         generateDailyKwhReportPdf(outputFileName, reportData, fromDate, toDate, tenantName);
     }
-
-
 
 
     public void ExportDailyKwhReportExcel(List<String> tableNames, String fromDate, String toDate , String tenantName) {

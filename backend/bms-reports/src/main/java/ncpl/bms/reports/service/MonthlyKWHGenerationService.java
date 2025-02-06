@@ -1,5 +1,8 @@
 package ncpl.bms.reports.service;
 import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
@@ -30,6 +33,10 @@ public class MonthlyKWHGenerationService {
 
     @Autowired
     private MonthlyKWHExcelService monthlyKWHExcelService;
+
+    @Autowired
+    private PageNumberEventHandler pageNumberEventHandler;
+
 
 
 
@@ -121,6 +128,8 @@ public class MonthlyKWHGenerationService {
             PdfWriter writer = new PdfWriter(fileName);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
+
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, pageNumberEventHandler);
 
             Paragraph title = new Paragraph("Monthly kWh Report - " + tenantName)
                     .setTextAlignment(TextAlignment.CENTER)
