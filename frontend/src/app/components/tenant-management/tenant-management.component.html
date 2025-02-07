@@ -3,10 +3,12 @@
         <h2 class="text-navy">Tenant List</h2>
     </div>
 
-    <div class="mb-3 text-end">
-        <input type="checkbox" [(ngModel)]="showAllDetails"> Show all details
-        <button class="btn btn-navy " (click)="onAddTenant()">Add Tenant</button>
+    <div class="mb-3 text-end" >
         
+            <!-- <input type="checkbox" [(ngModel)]="showAllDetails"> Show all details -->
+            <button class="btn " (click)="showAllDetailsManager()" style="margin-right: 10px;" [ngClass]="{ 'btn-navy-border': showAllDetails, 'btn-navy': !showAllDetails }">{{ showAllDetails ? 'Hide Details' : 'Show Details' }}</button>   
+            <button class="btn btn-navy " (click)="toggleHistory()" style="margin-right: 10px;" [ngClass]="{ 'btn-navy-border': showHistory, 'btn-navy': !showHistory }"> {{ showHistory ? 'Hide History' : 'Show History' }}</button>   
+            <button class="btn btn-navy " (click)="onAddTenant()">Add Tenant</button>          
     </div>
     
     <div class="mb-3 text-end">
@@ -25,12 +27,13 @@
                     <th scope="col" class="text-dark" *ngIf="showAllDetails">Email</th>
                     <th scope="col" class="text-dark" *ngIf="showAllDetails">Unit Address</th>
                     <th scope="col" class="text-dark" *ngIf="showAllDetails">Area Occupied</th>
+                    <th scope="col" class="text-dark" *ngIf="showAllDetails">Is Deleted</th>
                     <th scope="col" class="text-dark">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let tenant of tenants">
-                    <td>{{ tenant.id }}</td>
+                <tr *ngFor="let tenant of displayedTenants" style="background-color: pink;">
+                    <td >{{ tenant.id }}</td>
                     <td>{{ tenant.name }}</td>
                     <td>{{ tenant.address }}</td>
                     <td>{{ tenant.personOfContact }}</td>
@@ -38,6 +41,7 @@
                     <td *ngIf="showAllDetails">{{ tenant.email }}</td>
                     <td *ngIf="showAllDetails">{{ tenant.unitAddress }}</td>
                     <td *ngIf="showAllDetails">{{ tenant.areaOccupied }} sq. ft.</td>
+                    <td *ngIf="showAllDetails" [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.isDeleted }}</td>
                     <td>
                         <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditTenant(tenant.id)">
                             <i class="bi bi-pencil-square"></i>

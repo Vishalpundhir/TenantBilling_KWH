@@ -2,6 +2,10 @@
   background-color: #001f54;
 }
 
+.deleted-tenant {
+  background-color: lightcoral !important; /* Ensures override */
+}
+
 .table-navy th {
   color: white;
   text-align: center;
@@ -14,6 +18,9 @@
 .btn-navy {
   background-color: #001f54;
   color: white;
+}
+.btn-navy-border{
+  border-color: #001f54;
 }
 
 .btn-navy:hover {

@@ -22,7 +22,7 @@ public class TenantService {
     private JdbcTemplate jdbcTemplate;
 
     public void deleteTenant(Integer id) {
-        String sql = "DELETE FROM tenants WHERE id = ?";
+        String sql = "UPDATE tenant SET is_deleted = 1 WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
@@ -59,7 +59,7 @@ public class TenantService {
     }
 
     public List<TenantDTO> getAllTenants() {
-        String sql = "SELECT id, name, address, person_of_contact, mobile_number, unit_address,area_occupied, email FROM tenant";
+        String sql = "SELECT id, name, address, person_of_contact, mobile_number, unit_address,area_occupied, email, is_deleted FROM tenant";
         return jdbcTemplate.query(sql, new RowMapper<TenantDTO>() {
             @Override
             public TenantDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -71,7 +71,8 @@ public class TenantService {
                         rs.getString("mobile_number")  ,
                         rs.getString("unit_address")  ,
                         rs.getInt("area_occupied"),
-                        rs.getString("email")
+                        rs.getString("email"),
+                        rs.getBoolean("is_deleted")
                 );
             }
         });

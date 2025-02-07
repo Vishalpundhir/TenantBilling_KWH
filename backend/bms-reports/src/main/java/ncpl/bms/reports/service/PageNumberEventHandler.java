@@ -1,6 +1,8 @@
 package ncpl.bms.reports.service;
-
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.events.*;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
@@ -8,15 +10,9 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.layout.element.*;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
 
+import java.util.Map;
 
-import com.itextpdf.kernel.pdf.*;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.layout.element.Table;
 
 @Service
 public class PageNumberEventHandler implements IEventHandler {
@@ -35,7 +31,7 @@ public class PageNumberEventHandler implements IEventHandler {
         Canvas canvas = new Canvas(pdfCanvas, pageSize);
 
         // Create footer text for page number
-        Paragraph pageNumber = new Paragraph("Page " + currentPage )
+        Paragraph pageNumber = new Paragraph("Page " + currentPage  + "of " + totalPages)
                 .setFontSize(10)
                 .setTextAlignment(TextAlignment.RIGHT);
 
@@ -45,3 +41,4 @@ public class PageNumberEventHandler implements IEventHandler {
         pdfCanvas.release();
     }
 }
+

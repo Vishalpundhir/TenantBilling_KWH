@@ -10,12 +10,13 @@ public class TenantDTO {
     private String unitAddress;
     private Integer areaOccupied; // New field
     private String email;       // New field
+    private Boolean isDeleted;
 
     // Default constructor
     public TenantDTO() {}
 
     // Parameterized constructor
-    public TenantDTO(Integer id, String name, String address, String personOfContact, String mobileNumber, String unitAddress, Integer areaOccupied, String email) {
+    public TenantDTO(Integer id, String name, String address, String personOfContact, String mobileNumber, String unitAddress, Integer areaOccupied, String email, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -24,6 +25,7 @@ public class TenantDTO {
         this.unitAddress = unitAddress;
         this.areaOccupied = areaOccupied;
         this.email = email;
+        this.isDeleted= isDeleted;
     }
 
     // Getters and setters
@@ -89,6 +91,14 @@ public class TenantDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 

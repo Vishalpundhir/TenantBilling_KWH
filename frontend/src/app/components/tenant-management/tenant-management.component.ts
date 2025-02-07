@@ -14,7 +14,8 @@ import { environment } from '../../../environments/environment';
 })
 export class TenantManagementComponent {
 
-  tenants: any[] = [];
+  tenants: any[] = []; // Stores all tenants
+  displayedTenants: any[] = []; // Stores filtered tenants based on isDeleted
   showForm: boolean = false;
   isEdit: boolean = false;
   showAllDetails: boolean = false;
@@ -24,6 +25,7 @@ export class TenantManagementComponent {
     areaOccupied: '',
     unitAddress: ''
   };
+  showHistory: boolean = false;
   showErrors: boolean = false;
   private apiBaseUrl = environment.apiBaseUrl;
 
@@ -37,11 +39,26 @@ export class TenantManagementComponent {
     this.http.get<any[]>(`${this.apiBaseUrl}/get-all-tenants`).subscribe(
       (data) => {
         this.tenants = data;
+        this.updateDisplayedTenants();
       },
       (error) => {
         console.error('Error fetching tenants:', error);
       }
     );
+  }
+
+
+  updateDisplayedTenants(): void {
+    if (this.showHistory) {
+      this.displayedTenants = [...this.tenants]; // Show all tenants
+    } else {
+      this.displayedTenants = this.tenants.filter(tenant => !tenant.isDeleted); // Show only active tenants
+    }
+  }
+
+  toggleHistory(): void {
+    this.showHistory = !this.showHistory;
+    this.updateDisplayedTenants();
   }
 
   onAddTenant(): void {
@@ -127,5 +144,9 @@ export class TenantManagementComponent {
           }
         );
     }
+  }
+
+  showAllDetailsManager():void{
+  this.showAllDetails = !this.showAllDetails;
   }
 }

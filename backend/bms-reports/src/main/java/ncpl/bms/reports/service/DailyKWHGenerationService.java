@@ -177,7 +177,6 @@ public class DailyKWHGenerationService {
         }
     }
 
-
     public void ExportDailyKwhReportPdf(List<String> tableNames, String fromDate, String toDate, String tenantName) {
         // Map to store reports by table
         Map<String, List<DailyKwhReportDTO>> reportData = new HashMap<>();

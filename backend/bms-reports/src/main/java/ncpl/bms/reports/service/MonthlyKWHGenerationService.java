@@ -39,8 +39,6 @@ public class MonthlyKWHGenerationService {
 
 
 
-
-
     public List<MonthlyKwhReportDTO> generateMonthlyKwhReport(List<String> tableNames, String fromMonthYear, String toMonthYear) {
         if (!fromMonthYear.matches("\\d{4}-\\d{2}") || !toMonthYear.matches("\\d{4}-\\d{2}")) {
             throw new IllegalArgumentException("Month and Year must be in YYYY-MM format");
