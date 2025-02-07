@@ -2,13 +2,19 @@
   background-color: #001f54;
 }
 
-.deleted-tenant {
-  background-color: lightcoral !important; /* Ensures override */
-}
+
+/* .table-navy th {
+  color: white;
+  text-align: center;
+} */
 
 .table-navy th {
   color: white;
   text-align: center;
+  background-color: #e0e0e0; /* Static header with greyish brownish blackish color */
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .table-hover tbody tr:hover {
@@ -72,4 +78,9 @@
 
 .table-responsive::-webkit-scrollbar-thumb:hover {
   background-color: #004080; /* Lighter navy blue on hover */
+}
+
+.deleted-tenant {
+  background-color: lightcoral !important;
+  /* background-color: #f8d7da !important; */
 }

@@ -32,22 +32,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let tenant of displayedTenants" style="background-color: pink;">
-                    <td >{{ tenant.id }}</td>
-                    <td>{{ tenant.name }}</td>
-                    <td>{{ tenant.address }}</td>
-                    <td>{{ tenant.personOfContact }}</td>
-                    <td>{{ tenant.mobileNumber }}</td>
-                    <td *ngIf="showAllDetails">{{ tenant.email }}</td>
-                    <td *ngIf="showAllDetails">{{ tenant.unitAddress }}</td>
-                    <td *ngIf="showAllDetails">{{ tenant.areaOccupied }} sq. ft.</td>
+                <tr *ngFor="let tenant of displayedTenants">
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.id }}</td>
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.name }}</td>
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.address }}</td>
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.personOfContact }}</td>
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.mobileNumber }}</td>
+                    <td *ngIf="showAllDetails" [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.email }}</td>
+                    <td *ngIf="showAllDetails" [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.unitAddress }}</td>
+                    <td *ngIf="showAllDetails" [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.areaOccupied }} sq. ft.</td>
                     <td *ngIf="showAllDetails" [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.isDeleted }}</td>
-                    <td>
-                        <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditTenant(tenant.id)">
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">
+                        <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditTenant(tenant.id)" [disabled]="tenant.isDeleted">
                             <i class="bi bi-pencil-square"></i>
                         </button>
 
-                        <button class="btn btn-danger btn-sm" (click)="onDeleteTenant(tenant.id)">
+                        <button class="btn btn-danger btn-sm " (click)="onDeleteTenant(tenant.id)" [disabled]="tenant.isDeleted" >
                             <i class="bi bi-trash"></i>
                         </button>
 
