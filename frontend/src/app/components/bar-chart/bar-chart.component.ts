@@ -160,7 +160,89 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // updateChart(data: any[], month: string, year: string): void {
+  //   // Format the dates to dd-mm-yyyy
+  //   const days = data.map((item) => {
+  //     const date = new Date(item.date);
+  //     const day = date.getDate().toString().padStart(2, '0');
+  //     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+  //     const year = date.getFullYear();
+  //     return `${day}-${month}-${year}`;
+  //   });
+  
+  //   const values = data.map((item) => item.dailyKwh);
+  
+  //   if (days.length === 0 || values.length === 0) {
+  //     console.error('Labels or values are empty, cannot update chart.');
+  //     return;
+  //   }
+  
+  //   if (this.barChart) {
+  //     this.barChart.destroy();
+  //   }
+  
+  //   const ctx = this.barChartCanvas.nativeElement.getContext('2d');
+  //   this.barChart = new Chart(ctx!, {
+  //     type: this.currentChartType,
+  //     data: {
+  //       labels: days, // Updated labels
+  //       datasets: [
+  //         {
+  //           label: 'Daily KWH',
+  //           data: values,
+  //           backgroundColor: this.currentChartType === 'bar' ? 'rgba(54, 162, 235, 0.5)' : undefined,
+  //           borderColor: 'rgba(54, 162, 235, 1)',
+  //           borderWidth: 2,
+  //           fill: this.currentChartType === 'bar',
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       plugins: {
+  //         title: {
+  //           display: true,
+  //           text: `Chart for ${month} ${year}`,
+  //         },
+  //       },
+  //       scales: {
+  //         x: {
+  //           title: {
+  //             display: true,
+  //             text: 'Days',
+  //           },
+  //         },
+  //         y: {
+  //           title: {
+  //             display: true,
+  //             text: 'Daily KWH',
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
   updateChart(data: any[], month: string, year: string): void {
+    if (!data || data.length === 0) {
+      console.warn('No data available for the selected month and energy meter.');
+      
+      // Clear previous chart if it exists
+      if (this.barChart) {
+        this.barChart.destroy();
+      }
+  
+      // Show an alert message on the canvas
+      const ctx = this.barChartCanvas.nativeElement.getContext('2d');
+      ctx!.clearRect(0, 0, this.barChartCanvas.nativeElement.width, this.barChartCanvas.nativeElement.height);
+      ctx!.font = '16px Arial';
+      ctx!.fillStyle = 'red';
+      ctx!.textAlign = 'center';
+      ctx!.fillText('No data available for the selected values.', this.barChartCanvas.nativeElement.width / 2, this.barChartCanvas.nativeElement.height / 2);
+      
+      return;
+    }
+  
     // Format the dates to dd-mm-yyyy
     const days = data.map((item) => {
       const date = new Date(item.date);
@@ -172,11 +254,6 @@ export class BarChartComponent implements OnInit, AfterViewInit {
   
     const values = data.map((item) => item.dailyKwh);
   
-    if (days.length === 0 || values.length === 0) {
-      console.error('Labels or values are empty, cannot update chart.');
-      return;
-    }
-  
     if (this.barChart) {
       this.barChart.destroy();
     }
@@ -185,7 +262,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     this.barChart = new Chart(ctx!, {
       type: this.currentChartType,
       data: {
-        labels: days, // Updated labels
+        labels: days,
         datasets: [
           {
             label: 'Daily KWH',

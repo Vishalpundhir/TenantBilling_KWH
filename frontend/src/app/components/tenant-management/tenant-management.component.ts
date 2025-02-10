@@ -138,6 +138,7 @@ export class TenantManagementComponent {
           (response) => {
             console.log(response); // Log the plain text response
             this.tenants = this.tenants.filter((tenant) => tenant.id !== tenantId); // Update the table immediately
+            this.updateDisplayedTenants();
           },
           (error) => {
             console.error('Error deleting tenant:', error);
@@ -146,7 +147,8 @@ export class TenantManagementComponent {
     }
   }
 
+  
   showAllDetailsManager():void{
   this.showAllDetails = !this.showAllDetails;
-  }
+  }  
 }

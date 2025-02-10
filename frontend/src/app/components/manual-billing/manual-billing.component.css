@@ -1,0 +1,45 @@
+.text-navy {
+    color: #001f54;
+}
+
+.btn-navy {
+    background-color: #001f54;
+    color: white;
+}
+
+.btn-navy:hover {
+    background-color: #003580;
+    color: white;
+}
+
+.btn-outline-navy {
+    border-color: #001f54;
+    color: #001f54;
+}
+
+.btn-outline-navy:hover {
+    background-color: #001f54;
+    color: white;
+}
+
+.text-gray {
+    color: #6c757d;
+}
+
+.text-error {
+    color: #ff6b6b;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+}
+
+.is-invalid-border {
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    padding: 8px;
+    height: 100px;
+}

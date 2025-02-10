@@ -4,7 +4,6 @@ import { ExportKwhReportComponent } from './components/export-kwh-report/export-
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { TenantManagementComponent } from './components/tenant-management/tenant-management.component';
-import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { EnergyMeterManagementComponent } from './components/energy-meter-management/energy-meter-management.component';
 import { HomeComponent } from './components/home/home.component';
 import { BillingComponent } from './components/billing/billing.component';
@@ -14,35 +13,16 @@ import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginService } from './services/login.service';
+import { UserManagementComponent } from './components/user-management/user-management.component';
+import { ManualBillingComponent } from './components/manual-billing/manual-billing.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule,LoginComponent,RouterOutlet, ExportKwhReportComponent, SideBarComponent, BarChartComponent, TenantManagementComponent, PieChartComponent, EnergyMeterManagementComponent,HomeComponent,BillingComponent, NotFoundComponent],
+  imports: [CommonModule,LoginComponent,RouterOutlet, ExportKwhReportComponent, SideBarComponent, BarChartComponent, TenantManagementComponent, EnergyMeterManagementComponent,HomeComponent,BillingComponent, NotFoundComponent, UserManagementComponent, ManualBillingComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-// export class AppComponent implements OnInit {
-//   isLoggedIn: boolean = false;
-
-//   constructor(private router: Router) {}
-
-//   ngOnInit(): void {
-//     this.checkLoginStatus();
-//   }
-
-//   checkLoginStatus(): void {
-//     this.isLoggedIn = !!localStorage.getItem('role'); 
-//   }
-
-//   onLoginSuccess(): void {
-//     this.isLoggedIn = true; 
-//     this.router.navigate(['/home']); 
-//   }
-
-//   onLogout(): void {
-//     this.isLoggedIn = false;
-//   }
-// }
 export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
 

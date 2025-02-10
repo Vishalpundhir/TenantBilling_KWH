@@ -23,9 +23,9 @@ export const authGuard = () => {
   const role = loginService.getRole();
 
   if (role) {
-    return true; // Allow access to the route
+    return true; 
   } else {
-    router.navigate(['/login']); // Redirect to login page
-    return false; // Block access
+    router.navigate(['/login']); 
+    return false; 
   }
 };

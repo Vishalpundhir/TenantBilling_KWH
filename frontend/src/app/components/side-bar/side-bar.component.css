@@ -28,6 +28,7 @@
   font-weight: 400;
   text-decoration: none;
   transition: all 0.3s ease;
+  width: 240px;
   margin-left: 15px;
 }
 
@@ -70,4 +71,37 @@
 
 a{
   cursor: pointer;
+}
+
+.sub-menu {
+  padding-left: 30px;
+}
+
+.sub-nav-link {
+  color: #d1d1d1;
+  font-weight: 400;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: block;
+  margin-top: 5px;
+  width: 200px;
+  margin-left: 23px;
+  height: 40px;
+  line-height: 40px;
+  /* vertical-align: middle; */
+}
+.sub-nav-link:hover {
+  background-color: #495057;
+  color: white;
+  border-radius: 5px;
+  width: 200px;
+  margin-left: 23px;
+}
+
+.sub-nav-link.active {
+  background-color: #0d6efd;
+  color: white;
+  width: 200px;
+  border-radius: 5px;
+  margin-left: 23px;
 }

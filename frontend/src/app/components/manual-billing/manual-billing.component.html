@@ -1,0 +1,77 @@
+<!-- <div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Manual Bill</h2>
+    </div>
+
+    <form>
+        <div class="row align-items-top">
+            <div class="col-md-4">
+                <label for="tenantName" class="form-label text-gray">Select Tenant Name</label>
+                <select class="form-select w-100" id="tenantName">
+                    <option value="" selected disabled>Select a Tenant</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="billingMonth" class="form-label text-gray">Start Date</label>
+                <input type="date" class="form-control w-100" name="billingMonth">
+            </div>
+            <div class="col-md-4">
+                <label for="billingMonth" class="form-label text-gray">End Date</label>
+                <input type="date" class="form-control w-100" name="billingMonth">
+            </div>
+            <div class="container d-flex justify-content-center align-items-start mt-5 vh-100">
+                <button type="button" class="btn btn-navy p-12 h2" style="height: 40px; width: 1050px;" >Export Bill</button>
+            </div>
+                        
+        </div>
+       
+    </form>
+</div> -->
+
+<div class="container mt-5">
+    <div class="mb-4 text-center">
+        <h2 class="text-navy">Manual Bill</h2>
+    </div>
+
+    <form>
+        <div class="row align-items-top">
+            <div class="col-md-4">
+                <label for="tenantName" class="form-label text-gray">Select Tenant Name</label>
+                <select class="form-select w-100" id="tenantName" [(ngModel)]="selectedTenantId" name="tenantName" required
+                    [ngClass]="{ 'is-invalid': showErrors && !selectedTenantId }">
+                    <option value="" selected disabled>Select a Tenant</option>
+                    <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.name }}</option>
+                </select>
+                <div *ngIf="showErrors && !selectedTenantId" class="invalid-feedback">
+                    This field is required.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="startDate" class="form-label text-gray">Start Date</label>
+                <input type="date" class="form-control w-100" id="startDate" [(ngModel)]="startDate" name="startDate" required
+                    [ngClass]="{ 'is-invalid': showErrors && !startDate }" />
+                <div *ngIf="showErrors && !startDate" class="invalid-feedback">
+                    Please select a start date.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="endDate" class="form-label text-gray">End Date</label>
+                <input type="date" class="form-control w-100" id="endDate" [(ngModel)]="endDate" name="endDate" required
+                    [ngClass]="{ 'is-invalid': showErrors && !endDate }" />
+                <div *ngIf="showErrors && !endDate" class="invalid-feedback">
+                    Please select an end date.
+                </div>
+            </div>
+            <div class="col-md-4 text-center w-100 text-center" style="margin-top: 32px; ">
+                <button type="button" class="btn btn-navy w-100 px-4" style="height: 40px; width: 1050px; " (click)="exportManualBill()" [disabled]="isInvalidDateRange()">Export Bill</button>
+                <div *ngIf="isInvalidDateRange()" class="invalid-feedback">
+                    start date must be less than end date
+                </div>
+            </div>
+            
+        </div>
+    </form>
+</div>

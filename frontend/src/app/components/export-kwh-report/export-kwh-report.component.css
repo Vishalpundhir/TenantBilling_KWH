@@ -33,22 +33,21 @@
 #energyMeter {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Spacing between checkboxes */
+  gap: 8px; 
   border: 1px solid #ced4da;
   padding: 8px;
   border-radius: 4px;
   height: 150px;
-  max-height: 150px; /* Adjust to desired height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 150px; 
+  overflow-y: auto; 
   
 }
 
 .form-check {
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between checkbox and label */
+  gap: 8px; 
 }
-
 
 .invalid-feedback {
   color: #dc3545;
@@ -65,7 +64,7 @@
 }
 
 .is-invalid-border {
-  border: 1px solid #dc3545 !important; /* Red border */
+  border: 1px solid #dc3545 !important;
   border-radius: 4px;
   padding: 8px;
   height: 150px;

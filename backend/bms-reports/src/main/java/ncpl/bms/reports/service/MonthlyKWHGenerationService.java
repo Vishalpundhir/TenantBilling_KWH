@@ -38,7 +38,6 @@ public class MonthlyKWHGenerationService {
     private PageNumberEventHandler pageNumberEventHandler;
 
 
-
     public List<MonthlyKwhReportDTO> generateMonthlyKwhReport(List<String> tableNames, String fromMonthYear, String toMonthYear) {
         if (!fromMonthYear.matches("\\d{4}-\\d{2}") || !toMonthYear.matches("\\d{4}-\\d{2}")) {
             throw new IllegalArgumentException("Month and Year must be in YYYY-MM format");
@@ -51,14 +50,21 @@ public class MonthlyKWHGenerationService {
 
         for (String tableName : tableNames) {
             String sql = String.format(
-                    "SELECT DATE_FORMAT(t1.timestamp, '%%Y-%%m') AS month, " +
-                            "MIN(t1.kwh) AS start_kwh, " +
-                            "MAX(t1.kwh) AS end_kwh " +
-                            "FROM %s t1 " +
-                            "WHERE t1.timestamp BETWEEN ? AND ? " +
-                            "GROUP BY DATE_FORMAT(t1.timestamp, '%%Y-%%m') " +
-                            "ORDER BY month",
-                    tableName
+                    "SELECT t1.month, " +
+                            "       t1.start_kwh, " +
+                            "       t2.kwh AS next_month_kwh " +
+                            "FROM ( " +
+                            "    SELECT DATE_FORMAT(timestamp, '%%Y-%%m') AS month, " +
+                            "           MIN(kwh) AS start_kwh " +
+                            "    FROM %s " +
+                            "    WHERE timestamp BETWEEN ? AND ? " +
+                            "    GROUP BY DATE_FORMAT(timestamp, '%%Y-%%m') " +
+                            ") t1 " +
+                            "LEFT JOIN %s t2 " +
+                            "ON t2.timestamp = DATE_ADD(CONCAT(t1.month, '-01'), INTERVAL 1 MONTH) " +
+                            "AND TIME(t2.timestamp) = '00:00:00' " +
+                            "ORDER BY t1.month",
+                    tableName, tableName
             );
 
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, fromTimestamp, toTimestamp);
@@ -66,10 +72,10 @@ public class MonthlyKWHGenerationService {
             for (Map<String, Object> row : rows) {
                 String month = row.get("month").toString();
                 Double startKwh = row.get("start_kwh") != null ? Double.parseDouble(row.get("start_kwh").toString()) : null;
-                Double endKwh = row.get("end_kwh") != null ? Double.parseDouble(row.get("end_kwh").toString()) : null;
+                Double nextMonthKwh = row.get("next_month_kwh") != null ? Double.parseDouble(row.get("next_month_kwh").toString()) : null;
 
-                if (startKwh != null && endKwh != null) {
-                    double monthlyKwh = endKwh - startKwh;
+                if (startKwh != null && nextMonthKwh != null) {
+                    double monthlyKwh = nextMonthKwh - startKwh;
                     BigDecimal roundedMonthlyKwh = BigDecimal.valueOf(monthlyKwh).setScale(2, RoundingMode.HALF_UP);
 
                     combinedReports.add(new MonthlyKwhReportDTO(month, roundedMonthlyKwh.doubleValue(), tableName));
@@ -79,6 +85,7 @@ public class MonthlyKWHGenerationService {
 
         return combinedReports;
     }
+
 
     private String calculateLastDayOfMonth(String monthYear) {
         try {

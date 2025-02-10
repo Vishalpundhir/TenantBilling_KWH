@@ -2,8 +2,10 @@ package ncpl.bms.reports.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
+import ncpl.bms.reports.model.dto.UserDTO;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.security.MessageDigest;
@@ -46,6 +48,8 @@ public class LoginService {
             return Optional.empty();
         }
     }
+
+
 
     public static String hashPassword(String password) {
         try {

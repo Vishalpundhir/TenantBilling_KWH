@@ -16,18 +16,16 @@ import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+
+
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.element.Table;
 
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.io.font.constants.StandardFonts;
-
 
 
 @Service
-public class BillingService {
+public class ManualBillingService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -35,26 +33,15 @@ public class BillingService {
     @Autowired
     private TenantAndEnergyMeterService tenantAndEnergyMeterService;
 
+    public byte[] generateManualBillPdf(Long tenantId, String fromDate, String toDate) {
 
-    public byte[] generateBillPdf(Long tenantId, String month, String year) {
-        // Convert the numeric month to its full name
-        String monthName;
-        try {
-            int monthNumber = Integer.parseInt(month);
-            monthName = Month.of(monthNumber).name(); // Returns the month in uppercase
-            monthName = monthName.charAt(0) + monthName.substring(1).toLowerCase(); // Capitalize first letter
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid month format: " + month);
-        }
+
         float cellFontSize = 9;
-
-        // Fetch energy usage
-        Map<String, Double> energyUsage = tenantAndEnergyMeterService.getEnergyMetersForTenant(tenantId.intValue(), month, year);
+        Map<String, Double> energyUsage = tenantAndEnergyMeterService.getEnergyMetersForManualBill(tenantId.intValue(), fromDate, toDate);
         double ebUsage = BigDecimal.valueOf(energyUsage.get("totalEbKwh")).setScale(2, RoundingMode.HALF_UP).doubleValue();
         double dgUsage = BigDecimal.valueOf(energyUsage.get("totalDgKwh")).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
-
-        Map<String, Double> energyUsageCommonArea = tenantAndEnergyMeterService.getEnergyMetersForTenant(1, month, year);
+        Map<String, Double> energyUsageCommonArea = tenantAndEnergyMeterService.getEnergyMetersForManualBill(1, fromDate, toDate);
         double ebUsageCommonArea = BigDecimal.valueOf(energyUsageCommonArea.get("totalEbKwh")).setScale(2, RoundingMode.HALF_UP).doubleValue();
         double dgUsageCommonArea = BigDecimal.valueOf(energyUsageCommonArea.get("totalDgKwh")).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
@@ -91,7 +78,7 @@ public class BillingService {
             Document document = new Document(pdf);
 
             // Add centered title with full month name and year
-            Paragraph title = new Paragraph(billTitle + " - " + monthName + " " + year)
+            Paragraph title = new Paragraph(billTitle + " - " + fromDate + " to " + toDate)
                     .setTextAlignment(TextAlignment.CENTER)
                     .setFontSize(14)
                     .setMarginBottom(20);
@@ -234,7 +221,7 @@ public class BillingService {
             document.add(new Paragraph("Net Payable Amount:" + "₹").setFontSize(10).setMarginTop(20).setMarginBottom(10));
             Table netPayableTable = new Table(UnitValue.createPercentArray(new float[]{4, 2}))
                     .setWidth(UnitValue.createPercentValue(100));
-            netPayableTable.addCell(new Cell().add(new Paragraph("Tenant Unit Address Consumption ₹").setFontSize(cellFontSize)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            netPayableTable.addCell(new Cell().add(new Paragraph("Tenant Unit Address Consumption (INR)").setFontSize(cellFontSize)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
             netPayableTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", totalAmount)).setFontSize(cellFontSize).setTextAlignment(TextAlignment.RIGHT)));
             netPayableTable.addCell(new Cell().add(new Paragraph("Tenant Share of Common Area (INR)").setFontSize(cellFontSize)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
             netPayableTable.addCell(new Cell().add(new Paragraph(String.format("%,.2f", tenantShareCommonArea)).setFontSize(cellFontSize).setTextAlignment(TextAlignment.RIGHT)));
@@ -265,6 +252,8 @@ public class BillingService {
         } catch (Exception e) {
             throw new RuntimeException("Error generating PDF", e);
         }
+
+
     }
 
 
@@ -278,5 +267,7 @@ public class BillingService {
             throw new RuntimeException("Unexpected type: " + value.getClass().getName());
         }
     }
+
+
 
 }

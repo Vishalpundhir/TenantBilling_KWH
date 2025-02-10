@@ -1,8 +1,5 @@
 package ncpl.bms.reports.service;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.events.*;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
@@ -11,7 +8,6 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 
 
 @Service

@@ -37,23 +37,17 @@ public class DailyKWHGenerationController {
             @RequestParam String toDate,
             @RequestParam String tenantName) {
 
-        // Generate and export the PDF
         String pdfFileName = "daily_kwh_report.pdf";
         dailyKWHGenerationService.ExportDailyKwhReportPdf(tableNames, fromDate, toDate, tenantName);
 
         try {
-            // Read the generated PDF into a byte array
             File pdfFile = new File(pdfFileName);
             FileInputStream fileInputStream = new FileInputStream(pdfFile);
             byte[] pdfBytes = fileInputStream.readAllBytes();
             fileInputStream.close();
-
-            // Prepare HTTP response headers for PDF download
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + pdfFileName);
             headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
-
-            // Return the PDF as a response
             return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             throw new RuntimeException("Error while reading the PDF file", e);
@@ -72,18 +66,15 @@ public class DailyKWHGenerationController {
         dailyKWHGenerationService.ExportDailyKwhReportExcel(tableNames, fromDate, toDate,  tenantName);
 
         try {
-            // Read the generated Excel file into a byte array
             File excelFile = new File(excelFileName);
             FileInputStream fileInputStream = new FileInputStream(excelFile);
             byte[] excelBytes = fileInputStream.readAllBytes();
             fileInputStream.close();
 
-            // Prepare HTTP response headers for Excel download
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=daily_kwh_report.xlsx");
             headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-            // Return the Excel file as a response
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             throw new RuntimeException("Error while reading the Excel file", e);

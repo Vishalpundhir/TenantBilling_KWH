@@ -1,6 +1,5 @@
-<div class="sidebar">
+<!-- <div class="sidebar">
   <div class="logo">
-    <!-- <span>Company Logo</span> -->
      <img class="logo-img" src="../../../assets/images/NCPL_Logo_Long_White.png">
   </div>
 
@@ -22,6 +21,9 @@
     </a>
     <a *ngIf="role === 'admin' || role === 'operator'" routerLink="/billing" routerLinkActive="active" class="nav-link">
       <i class="bi bi-cash-coin me-2"></i> Billing
+    </a>
+    <a *ngIf="role === 'admin'" routerLink="/user-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-people-fill me-2"></i> User Management
     </a>
   </nav>
 
@@ -47,8 +49,63 @@
     </div>
 
     <div *ngIf="showDropdown" class="dropdown-menu dropdown-menu-dark show p-2 mt-2" style="position: relative;">
-      <!-- <a class="dropdown-item text-white" href="#">Profile</a>
-      <a class="dropdown-item text-white" href="#">Settings</a> -->
+      <a class="dropdown-item text-white" (click)="onSignOut()">Sign Out</a>
+    </div>
+  </div>
+</div> -->
+
+<div class="sidebar">
+  <div class="logo">
+    <img class="logo-img" src="../../../assets/images/NCPL_Logo_Long_White.png">
+  </div>
+
+  <nav class="nav flex-column mt-3">
+    <a *ngIf="role === 'admin' || role === 'operator'" routerLink="/home" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-house-door-fill me-2"></i> Home
+    </a>
+    <a *ngIf="role === 'admin' || role === 'operator'" routerLink="/export-kwh-report" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-file-earmark-text me-2"></i> Export KWH Report
+    </a>
+    <a *ngIf="role === 'admin' || role === 'operator'" routerLink="/daily-visual-report" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-bar-chart-line me-2"></i> Daily Visual Report
+    </a>
+    <a *ngIf="role === 'admin'" routerLink="/tenant-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-person-lines-fill me-2"></i> Tenant Management
+    </a>
+    <a *ngIf="role === 'admin'" routerLink="/energy-meter-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-gear-wide-connected me-2"></i> EMs Management
+    </a>
+    
+    <div class="nav-link" *ngIf="role === 'admin' || role === 'operator'" (click)="toggleBillingDropdown()" style="cursor: pointer;">
+      <i class="bi bi-cash-coin me-2"></i> Billing
+      <i class="bi" [ngClass]="showBillingDropdown ? 'bi-chevron-down' : 'bi-chevron-right'" style="float: right;"></i>
+    </div>
+    <div *ngIf="showBillingDropdown" class="sub-menu">
+      <a routerLink="/billing" routerLinkActive="active" class="sub-nav-link">
+        <i class="bi bi-calendar-check me-2" style="margin-left: 15px;"></i> Monthly Billing
+      </a>
+      <a routerLink="/manual-billing" routerLinkActive="active" class="sub-nav-link">
+        <i class="bi bi-pencil-square me-2" style="margin-left: 15px;"></i> Manual Billing
+      </a>
+    </div>
+    
+    <a *ngIf="role === 'admin'" routerLink="/user-management" routerLinkActive="active" class="nav-link">
+      <i class="bi bi-people-fill me-2"></i> User Management
+    </a>
+  </nav>
+
+  <div class="sidebar-footer mt-auto px-3 py-2">
+    <div class="d-flex align-items-center justify-content-between">
+      <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="User" class="rounded-circle me-2" style="width: 40px; height: 40px;" />
+      <div class="text-white">
+        <strong>{{ userName }}</strong>
+      </div>
+      <button style="margin-right: 50px; margin-top: 4px;" class="btn btn-sm" (click)="toggleDropdown()" [attr.aria-expanded]="showDropdown">
+        <i class="bi" [ngClass]="showDropdown ? 'bi-chevron-up' : 'bi-chevron-down'" style="color: white;"></i>
+      </button>
+    </div>
+
+    <div *ngIf="showDropdown" class="dropdown-menu dropdown-menu-dark show p-2 mt-2" style="position: relative;">
       <a class="dropdown-item text-white" (click)="onSignOut()">Sign Out</a>
     </div>
   </div>

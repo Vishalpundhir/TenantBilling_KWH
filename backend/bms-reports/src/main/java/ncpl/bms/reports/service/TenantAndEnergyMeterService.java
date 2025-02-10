@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +18,9 @@ public class TenantAndEnergyMeterService {
 
     @Autowired
     private MonthlyKWHGenerationService monthlyKWHGenerationService;
+
+    @Autowired
+    private DailyKWHGenerationService dailyKWHGenerationService;
 
     public TenantDTO getTenantDetailsById(int tenantId) {
         try {
@@ -127,13 +128,6 @@ public class TenantAndEnergyMeterService {
             totalDgKwh = dgData.stream().mapToDouble(MonthlyKwhReportDTO::getMonthlyKwh).sum();
         }
 
-        // Print results
-//        System.out.println("EB Energy Meters assigned to Tenant ID " + tenantId + ": " + ebMeters);
-//        System.out.println("Total EB Consumption (kWh): " + totalEbKwh);
-//        System.out.println("DG Energy Meters assigned to Tenant ID " + tenantId + ": " + dgMeters);
-//        System.out.println("Total DG Consumption (kWh): " + totalDgKwh);
-
-        // Return the results
         Map<String, Double> energyUsage = new HashMap<>();
         energyUsage.put("totalEbKwh", totalEbKwh);
         energyUsage.put("totalDgKwh", totalDgKwh);
@@ -141,4 +135,39 @@ public class TenantAndEnergyMeterService {
         return energyUsage;
     }
 
+
+    public Map<String, Double> getEnergyMetersForManualBill(int tenantId, String fromDate, String toDate) {
+        // Query to fetch energy meters assigned to the tenant
+        String sql = "SELECT name FROM  tenant_to_energy_meter_relation WHERE tenant_id = ?";
+        List<String> energyMeters = jdbcTemplate.query(sql, new Object[]{tenantId}, (rs, rowNum) -> rs.getString("name"));
+
+        // Separate energy meters into EB and DG categories
+        List<String> ebMeters = energyMeters.stream()
+                .filter(name -> name.endsWith("_eb_kwh"))
+                .toList();
+
+        List<String> dgMeters = energyMeters.stream()
+                .filter(name -> name.endsWith("_dg_kwh"))
+                .toList();
+
+        // Fetch data for EB meters
+        double totalEbKwh = 0;
+        if (!ebMeters.isEmpty()) {
+            double ebData = dailyKWHGenerationService.getTotalDailyKwhSum(ebMeters, fromDate, toDate);
+            totalEbKwh = ebData;
+        }
+
+        // Fetch data for DG meters
+        double totalDgKwh = 0;
+        if (!dgMeters.isEmpty()) {
+            double dgData = dailyKWHGenerationService.getTotalDailyKwhSum(dgMeters, fromDate, toDate);
+            totalDgKwh = dgData;
+        }
+
+        Map<String, Double> energyUsage = new HashMap<>();
+        energyUsage.put("totalEbKwh", totalEbKwh);
+        energyUsage.put("totalDgKwh", totalDgKwh);
+
+        return energyUsage;
+    }
 }

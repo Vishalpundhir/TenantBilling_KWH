@@ -1,11 +1,7 @@
 package ncpl.bms.reports.service;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,20 +15,12 @@ import java.io.IOException;
 import java.util.List;
 import ncpl.bms.reports.model.dto.DailyKwhReportDTO;
 import com.itextpdf.kernel.pdf.*;
-import com.itextpdf.layout.element.*;
 import java.util.Map;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.Document;
-
 import com.itextpdf.kernel.events.*;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.kernel.geom.Rectangle;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-
 
 @Component
 @Slf4j
@@ -62,16 +50,23 @@ public class DailyKWHGenerationService {
 
         for (String tableName : tableNames) {
             String sql = String.format(
-                    "SELECT DATE(t1.timestamp) AS day, " +
-                            "       MIN(t1.kwh) AS start_kwh, " +
-                            "       MAX(t2.kwh) AS next_day_kwh " +
-                            "FROM %s t1 " +
-                            "LEFT JOIN %s t2 ON DATE(t2.timestamp) = DATE_ADD(DATE(t1.timestamp), INTERVAL 1 DAY) " +
-                            "WHERE t1.timestamp BETWEEN ? AND ? " +
-                            "GROUP BY DATE(t1.timestamp) " +
-                            "ORDER BY day",
+                    "SELECT t1.day, " +
+                            "       t1.start_kwh, " +
+                            "       t2.kwh AS next_day_kwh " +
+                            "FROM ( " +
+                            "    SELECT DATE(timestamp) AS day, " +
+                            "           MIN(kwh) AS start_kwh " +
+                            "    FROM %s " +
+                            "    WHERE timestamp BETWEEN ? AND ? " +
+                            "    GROUP BY DATE(timestamp) " +
+                            ") t1 " +
+                            "LEFT JOIN %s t2 " +
+                            "ON t2.timestamp = DATE_ADD(t1.day, INTERVAL 1 DAY) " +
+                            "AND TIME(t2.timestamp) = '00:00:00' " +
+                            "ORDER BY t1.day",
                     tableName, tableName
             );
+
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, fromTimestamp, toTimestamp);
 
             for (Map<String, Object> row : rows) {
@@ -93,12 +88,23 @@ public class DailyKWHGenerationService {
     }
 
 
-    public void generateDailyKwhReportPdf(
-            String fileName,
-            Map<String, List<DailyKwhReportDTO>> reportData,
-            String fromDate,
-            String toDate
-            , String tenantName) {
+    public double getTotalDailyKwhSum(List<String> tableNames, String fromDate, String toDate) {
+        // Validate input dates
+        if (!fromDate.matches("\\d{4}-\\d{2}-\\d{2}") || !toDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            throw new IllegalArgumentException("Dates must be in the format YYYY-MM-DD");
+        }
+
+        // Get daily KWH report data
+        List<DailyKwhReportDTO> dailyReports = generateDailyKwhReportData(tableNames, fromDate, toDate);
+
+        // Sum the daily KWH values
+        return dailyReports.stream()
+                .mapToDouble(DailyKwhReportDTO::getDailyKwh)
+                .sum();
+    }
+
+
+    public void generateDailyKwhReportPdf(String fileName, Map<String, List<DailyKwhReportDTO>> reportData, String fromDate, String toDate, String tenantName) {
         try {
             // Initialize PDF writer
             PdfWriter writer = new PdfWriter(fileName);

@@ -1,4 +1,4 @@
-.table-navy {
+/* .table-navy {
   background-color: #001f54;
 }
 
@@ -13,6 +13,87 @@
 
 .table-hover tbody tr:hover {
   background-color: #f8f9fa;
+}
+
+.btn-navy {
+  background-color: #001f54;
+  color: white;
+}
+
+.btn-navy:hover {
+  background-color: #003580;
+  color: white;
+}
+
+.btn-outline-navy {
+  border-color: #001f54;
+  color: #001f54;
+}
+
+.btn-outline-navy:hover {
+  background-color: #001f54;
+  color: white;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+}
+
+.modal-dialog {
+  margin-top: 50px;
+  margin-right: 150px;
+}
+
+.modal-content {
+  z-index: 1051;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+td {
+  text-align: center;
+}
+
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 5px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #001f3f; 
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: #004080; 
+} */
+
+.table-navy {
+  background-color: #001f54;
+}
+
+.table-navy th {
+  color: white;
+  text-align: center;
+  background-color: #e0e0e0; 
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+td {
+  text-align: center;
 }
 
 .btn-navy {

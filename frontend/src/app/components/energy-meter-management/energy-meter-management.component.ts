@@ -39,13 +39,6 @@ export class EnergyMeterManagementComponent implements OnInit {
       error: (err) => console.error('Error fetching available energy meter names:', err),
     });
   }
-  
-  // fetchEnergyMeters(): void {
-  //   this.http.get<any[]>(`${this.apiBaseUrl}/all-active-energy-meters`).subscribe({
-  //     next: (data) => (this.energyMeters = data),
-  //     error: (err) => console.error('Error fetching energy meters:', err),
-  //   });
-  // }
 
   fetchEnergyMeters(): void {
     this.http.get<any[]>(`${this.apiBaseUrl}/all-active-energy-meters`).subscribe({

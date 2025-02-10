@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let tenant of displayedTenants">
+                <!-- <tr *ngFor="let tenant of displayedTenants">
                     <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.id }}</td>
                     <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.name }}</td>
                     <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">{{ tenant.address }}</td>
@@ -51,6 +51,28 @@
                             <i class="bi bi-trash"></i>
                         </button>
 
+                    </td>
+                </tr>  -->
+                <tr *ngFor="let tenant of displayedTenants">
+                    <td *ngFor="let field of ['id', 'name', 'address', 'personOfContact', 'mobileNumber']"
+                        [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">
+                        {{ tenant[field] }}
+                    </td>
+                    <ng-container *ngIf="showAllDetails">
+                        <td *ngFor="let field of ['email', 'unitAddress', 'areaOccupied', 'isDeleted']"
+                            [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">
+                            {{ tenant[field] }}
+                        </td>
+                    </ng-container> 
+                    <td [ngClass]="{ 'deleted-tenant': tenant.isDeleted }">
+                        <button class="btn btn-outline-navy btn-sm me-2" (click)="onEditTenant(tenant.id)"
+                            [disabled]="tenant.isDeleted">  
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" (click)="onDeleteTenant(tenant.id)"
+                            [disabled]="tenant.isDeleted">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
